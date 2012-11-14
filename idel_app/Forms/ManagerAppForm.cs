@@ -12,6 +12,11 @@ namespace idel_app.Forms {
     public ManagerAppForm() {
       InitializeComponent();
       this.Paint += new PaintEventHandler(ManagerAppForm_Paint);
+      this.SizeChanged += new EventHandler(ManagerAppForm_SizeChanged);
+    }
+
+    private void ManagerAppForm_SizeChanged(object sender, EventArgs e) {
+      this.Invalidate();
     }
 
     private void ManagerAppForm_Paint(object sender, PaintEventArgs e) {
@@ -22,7 +27,7 @@ namespace idel_app.Forms {
     private void DrawRectangle(Graphics g, int x, int y, int widht, int height) {
       Rectangle rec = new Rectangle(x, y, widht, height);
       if ((widht != 0) && (height != 0)) {
-        System.Drawing.Drawing2D.LinearGradientBrush gradient = new System.Drawing.Drawing2D.LinearGradientBrush(rec, Color.FromArgb(251, 188, 59), Color.White, System.Drawing.Drawing2D.LinearGradientMode.Horizontal);
+        System.Drawing.Drawing2D.LinearGradientBrush gradient = new System.Drawing.Drawing2D.LinearGradientBrush(rec, Color.LightBlue, Color.White, System.Drawing.Drawing2D.LinearGradientMode.Horizontal);
         g.FillRectangle(gradient, rec);
         return;
       }
