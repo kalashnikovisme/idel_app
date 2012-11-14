@@ -27,7 +27,7 @@ namespace idel_app.Forms {
     private void DrawRectangle(Graphics g, int x, int y, int widht, int height) {
       Rectangle rec = new Rectangle(x, y, widht, height);
       if ((widht != 0) && (height != 0)) {
-        System.Drawing.Drawing2D.LinearGradientBrush gradient = new System.Drawing.Drawing2D.LinearGradientBrush(rec, Color.LightBlue, Color.White, System.Drawing.Drawing2D.LinearGradientMode.Horizontal);
+        System.Drawing.Drawing2D.LinearGradientBrush gradient = new System.Drawing.Drawing2D.LinearGradientBrush(rec, idel_app.Middle.Const.GRADIENT_COLOR_1, idel_app.Middle.Const.GRADIENT_COLOR_2, System.Drawing.Drawing2D.LinearGradientMode.Horizontal);
         g.FillRectangle(gradient, rec);
         return;
       }

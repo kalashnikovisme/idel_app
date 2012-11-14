@@ -46,11 +46,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\Form1.cs">
+    <Compile Include="Controls\ConstControls.cs" />
+    <Compile Include="Controls\AppButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DisComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DisTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\FunctionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\OpacityLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\OpacityLinkLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\OpacityTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\ConstForms.cs" />
+    <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ManagerAppForm.cs">
       <SubType>Form</SubType>
@@ -58,10 +81,11 @@
     <Compile Include="Forms\ManagerAppForm.Designer.cs">
       <DependentUpon>ManagerAppForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Middle\Const.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
