@@ -14,5 +14,7 @@ namespace idel_app {
       Application.SetCompatibleTextRenderingDefault(false);
       Application.Run(new MainWindow());
     }
+
+    internal static idel_app.Middle.MiddleClass mainMiddleClass = new Middle.MiddleClass();
   }
 }

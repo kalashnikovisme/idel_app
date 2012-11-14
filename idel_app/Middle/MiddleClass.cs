@@ -5,9 +5,6 @@ using System.Text;
 
 namespace idel_app.Middle {
   public class MiddleClass {
-    public void GetFunctions() {
-      /* Брать из файла */
-      throw new NotImplementedException();
-    }
+    
   }
 }
