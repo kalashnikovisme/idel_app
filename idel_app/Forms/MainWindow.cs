@@ -12,6 +12,7 @@ using idel_app.Functions;
 
 namespace idel_app {
   public partial class MainWindow : ManagerAppForm {
+    private FunctionPanel fullFunctionPanel;
     private FunctionPanel leftFunctionPanel;
     private FunctionPanel rightFunctionPanel;
 
@@ -28,20 +29,25 @@ namespace idel_app {
     /// Инициализирует два основных поля интерфейса
     /// </summary>
     private void InitializeMainFunctionPanels() {
+      fullFunctionPanel = new FunctionPanel() {
+        Dock = DockStyle.Fill,
+        RowCount = 1,       // badcode
+        ColumnCount = 2,     // badcode
+      };
+      fullFunctionPanel.ColumnStyles.Insert(0, new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, ConstForms.COLUMN_WIDTH));
+      fullFunctionPanel.ColumnStyles.Insert(1, new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize));
+      this.Controls.Add(fullFunctionPanel);
+
       leftFunctionPanel = new FunctionPanel() {
-        Width = ConstForms.WIDTH_LEFT_FUNCTION_PANEL,
-        Dock = DockStyle.Left,
-        TableBorderStyle = BorderStyle.Fixed3D
+        Dock = DockStyle.Fill
       };
       leftFunctionPanel.ReverseGradient = true;
-      this.Controls.Add(leftFunctionPanel);
+      this.fullFunctionPanel.Controls.Add(leftFunctionPanel, 0, 0);   // badcode
 
       rightFunctionPanel = new FunctionPanel() {
-        Width = this.ClientRectangle.Width - ConstForms.WIDTH_LEFT_FUNCTION_PANEL,
-        Dock = DockStyle.Right,
-        TableBorderStyle = BorderStyle.Fixed3D
+        Dock = DockStyle.Fill
       };
-      this.Controls.Add(rightFunctionPanel);
+      this.fullFunctionPanel.Controls.Add(rightFunctionPanel, 1, 0);  // badcode
     }
 
     /// <summary>

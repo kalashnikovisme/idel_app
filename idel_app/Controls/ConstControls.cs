@@ -21,7 +21,5 @@ namespace SpecialControls {
     public const int CONTROL_INDENT_MIDDLE = 10;
     public const int CONTROL_INDENT_BIG = 15;
     public const int CONTROL_INDENT_VERY_BIG = 30;
-
-
   }
 }
