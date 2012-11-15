@@ -108,6 +108,29 @@ namespace idel_app {
       createRequestButton.Click += new EventHandler(createRequestButton_Click);
     }
 
+    private void RequestView_Click(object sender, EventArgs e) {
+      viewRequests();
+    }
+
+    private void viewRequests() {
+      rightFunctionPanel.RowCount = 2;      // badcode
+      rightFunctionPanel.ColumnCount = 3;   // badcode
+      rightFunctionPanel.ColumnStyles.Insert(0, new ColumnStyle(SizeType.Percent, 35F));
+      rightFunctionPanel.ColumnStyles.Insert(1, new ColumnStyle(SizeType.AutoSize));
+      rightFunctionPanel.ColumnStyles.Insert(2, new ColumnStyle(SizeType.Absolute, ConstForms.COLUMN_WIDTH / 2));
+      rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 80F));
+      rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
+      AppDataGridView requestDataGridView = new AppDataGridView() {
+        Indent = AppDataGridView.ControlIndent.Big
+      };
+      List<string> columns = Program.mainMiddleClass.RequestFields();
+      foreach (string c in columns) {
+        requestDataGridView.Columns.Add(c, c);
+      }
+      rightFunctionPanel.Controls.Add(requestDataGridView, 0, 0);
+      rightFunctionPanel.SetColumnSpan(requestDataGridView, 2);
+    }
+
     private void createRequestButton_Click(object sender, EventArgs e) {
       throw new NotImplementedException();
     }
@@ -120,8 +143,6 @@ namespace idel_app {
       throw new NotImplementedException();
     }
 
-    private void RequestView_Click(object sender, EventArgs e) {
-      throw new NotImplementedException();
-    }
+    
   }
 }
