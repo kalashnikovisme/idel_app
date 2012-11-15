@@ -5,8 +5,14 @@ using System.Text;
 
 namespace idel_app.Functions {
   public static class ConstFunctions {
-    const int FUNCTION_GROUPS_COUNT = 1;
+    public const int FUNCTION_GROUPS_COUNT = 1;
 
-    const string FUNCTION_REQUEST_TITLE_TEXT = "Заявка";
+    public const int REQUEST_INDEX = 0;
+    public const int REQUEST_FUNCTIONS_COUNT = 4;
+    public const int REQUEST_WORKSPACE_COUNT = 3;
+
+    public const string REQUEST_VIEW_TITLE = "Заявки";
+    public const string REQUEST_PROVIDERS_VIEW_TITLE = "Список поставщиков";
+    public const string REQUEST_PRODUCTS_VIEW_TITLE = "Виды товаров";
   }
 }

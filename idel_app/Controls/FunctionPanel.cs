@@ -56,7 +56,7 @@ namespace SpecialControls {
         if (reverseGradient == false) {
           gradient = new System.Drawing.Drawing2D.LinearGradientBrush(rec, idel_app.Middle.Const.GRADIENT_COLOR_1, idel_app.Middle.Const.GRADIENT_COLOR_2, System.Drawing.Drawing2D.LinearGradientMode.Horizontal);
         } else {
-          gradient = new System.Drawing.Drawing2D.LinearGradientBrush(rec, Color.White, Color.FromArgb(251, 188, 59), System.Drawing.Drawing2D.LinearGradientMode.Horizontal);          
+          gradient = new System.Drawing.Drawing2D.LinearGradientBrush(rec, idel_app.Middle.Const.GRADIENT_COLOR_2, idel_app.Middle.Const.GRADIENT_COLOR_1, System.Drawing.Drawing2D.LinearGradientMode.Horizontal);          
         }
         g.FillRectangle(gradient, rec);
         return;

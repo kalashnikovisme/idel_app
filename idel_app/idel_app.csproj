@@ -81,6 +81,7 @@
     <Compile Include="Forms\ManagerAppForm.Designer.cs">
       <DependentUpon>ManagerAppForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Functions\ConstFunctions.cs" />
     <Compile Include="Middle\Const.cs" />
     <Compile Include="Middle\MiddleClass.cs" />
     <Compile Include="Program.cs" />
