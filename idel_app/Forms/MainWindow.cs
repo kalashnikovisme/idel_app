@@ -24,6 +24,9 @@ namespace idel_app {
       RequestFunctionGroupInitialize();
     }
 
+    /// <summary>
+    /// Инициализирует два основных поля интерфейса
+    /// </summary>
     private void InitializeMainFunctionPanels() {
       leftFunctionPanel = new FunctionPanel() {
         Width = ConstForms.WIDTH_LEFT_FUNCTION_PANEL,
@@ -41,6 +44,9 @@ namespace idel_app {
       this.Controls.Add(rightFunctionPanel);
     }
 
+    /// <summary>
+    /// Инициализирует поля для групп функций внутри левого основного поля интерфейса
+    /// </summary>
     private void InitializeFunctionPanelsForFunctions() {
       functionsGroup = new FunctionPanel[ConstFunctions.FUNCTION_GROUPS_COUNT];
       for (int i = 0; i < functionsGroup.Length; i++) {
@@ -57,6 +63,9 @@ namespace idel_app {
       leftFunctionPanel.Controls.AddRange(functionsGroup);
     }
 
+    /// <summary>
+    /// Добавляет контролы управления в поле групп функций для заявок
+    /// </summary>
     private void RequestFunctionGroupInitialize() {
       OpacityLinkLabel[] requestFunctionGroupLinkLabels = new OpacityLinkLabel[ConstFunctions.REQUEST_WORKSPACE_COUNT];
       for (int i = 0; i < ConstFunctions.REQUEST_WORKSPACE_COUNT; i++) {
@@ -89,6 +98,12 @@ namespace idel_app {
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].Click += new EventHandler(RequestView_Click);
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PROVIDERS_VIEW_TITLE)].Click += new EventHandler(RequestViewProvider_Click);
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PRODUCTS_VIEW_TITLE)].Click += new EventHandler(RequestViewProducts_Click);
+
+      createRequestButton.Click += new EventHandler(createRequestButton_Click);
+    }
+
+    private void createRequestButton_Click(object sender, EventArgs e) {
+      throw new NotImplementedException();
     }
 
     private void RequestViewProducts_Click(object sender, EventArgs e) {

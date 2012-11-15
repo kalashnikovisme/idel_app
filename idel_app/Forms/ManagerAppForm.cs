@@ -8,6 +8,9 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace idel_app.Forms {
+  /// <summary>
+  /// Класс родитель всех окон в приложении
+  /// </summary>
   public partial class ManagerAppForm : Form {
     public ManagerAppForm() {
       InitializeComponent();

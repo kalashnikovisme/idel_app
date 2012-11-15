@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 
 namespace idel_app.Functions {
+  /// <summary>
+  /// Класс, в котором хранятся все константы, относящиеся к функциям
+  /// </summary>
   public static class ConstFunctions {
     public const int FUNCTION_GROUPS_COUNT = 1;
 
