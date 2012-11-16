@@ -45,7 +45,8 @@ namespace idel_app {
       this.fullFunctionPanel.Controls.Add(leftFunctionPanel, 0, 0);   // badcode
 
       rightFunctionPanel = new FunctionPanel() {
-        Dock = DockStyle.Fill
+        Dock = DockStyle.Fill,
+        AutoScroll = true
       };
       this.fullFunctionPanel.Controls.Add(rightFunctionPanel, 1, 0);  // badcode
     }
@@ -113,16 +114,48 @@ namespace idel_app {
     }
 
     private void viewRequests() {
+      rightFunctionPanel.Controls.Clear();
       rightFunctionPanel.RowCount = 2;      // badcode
       rightFunctionPanel.ColumnCount = 3;   // badcode
-      rightFunctionPanel.ColumnStyles.Insert(0, new ColumnStyle(SizeType.Percent, 35F));
-      rightFunctionPanel.ColumnStyles.Insert(1, new ColumnStyle(SizeType.AutoSize));
-      rightFunctionPanel.ColumnStyles.Insert(2, new ColumnStyle(SizeType.Absolute, ConstForms.COLUMN_WIDTH / 2));
+      rightFunctionPanel.ColumnStyles.Insert(0, new ColumnStyle(SizeType.Percent, 33F));
+      rightFunctionPanel.ColumnStyles.Insert(1, new ColumnStyle(SizeType.Percent, 33F));
+      rightFunctionPanel.ColumnStyles.Insert(2, new ColumnStyle(SizeType.Percent, 33F));
       rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 80F));
-      rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
+      rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT * 2));
+
+      AppDataGridView requestDataGridView = initializeRequestDataGridView();
+      List<List<string>> list = Program.mainMiddleClass.AllRequests();
+      foreach (List<string> l in list) {
+        requestDataGridView.Rows.Add(l.ToArray<string>());
+      }
+      rightFunctionPanel.Controls.Add(requestDataGridView, 0, 0);
+      rightFunctionPanel.SetColumnSpan(requestDataGridView, 3);
+
+      AppButton addRequestButton = new AppButton() {
+        Text = "Добавить заявку",
+        Indent = AppButton.ControlIndent.Middle
+      };
+      addRequestButton.Click += new EventHandler(addRequestButton_Click);
+      rightFunctionPanel.Controls.Add(addRequestButton, 0, 1);
+
+      AppButton deleteRequestButton = new AppButton() {
+        Text = "Удалить заявку",
+        Indent = AppButton.ControlIndent.Middle
+      };
+      rightFunctionPanel.Controls.Add(deleteRequestButton, 1, 1);
+    }
+
+    private void addRequestButton_Click(object sender, EventArgs e) {
       
+    }
+
+    private AppDataGridView initializeRequestDataGridView() {
       AppDataGridView requestDataGridView = new AppDataGridView() {
-        Indent = AppDataGridView.ControlIndent.Big
+        Indent = AppDataGridView.ControlIndent.Middle,
+        Font = new Font("Times New Roman", 15F),
+        AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells,
+        RowHeadersVisible = false,
+        ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
       };
       List<string> columnNames = Program.mainMiddleClass.RequestFields();
       List<DataGridViewTextBoxColumn> columns = new List<DataGridViewTextBoxColumn>();
@@ -138,16 +171,8 @@ namespace idel_app {
       };
       requestDataGridView.Columns.Add(checkColumn);
       requestDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
-      requestDataGridView.DataSource = Program.mainMiddleClass.AllRequests();
-      rightFunctionPanel.Controls.Add(requestDataGridView, 0, 0);
-
-      /* В requestDataGrivView откуда не возьмись появляются две колонки capacity и count.
-       откуда они появляются не разобрался, надо исправить. Следующими двумя строками я их убираю. 
-       Появляются они на месте вот этого комментария. 
-       Калашников. */
-      requestDataGridView.Columns.Remove("Capacity");
-      requestDataGridView.Columns.Remove("Count");
-      rightFunctionPanel.SetColumnSpan(requestDataGridView, 2);
+      requestDataGridView.Columns[0].Width = 40;
+      return requestDataGridView;
     }
 
     private void createRequestButton_Click(object sender, EventArgs e) {
@@ -162,6 +187,8 @@ namespace idel_app {
       throw new NotImplementedException();
     }
 
-    
+    private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+
+    }
   }
 }

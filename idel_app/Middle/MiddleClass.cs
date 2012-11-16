@@ -9,7 +9,11 @@ namespace idel_app.Middle {
   /// </summary>
   public class MiddleClass {
     public List<List<string>> AllRequests() {
-      return new List<List<string>>();
+      List<List<string>> list = new List<List<string>>();
+      for (int i = 0; i < 30; i++) {
+        list.Add(new List<string>() { "1", "name", "employee" });
+      }
+      return list;
     }
 
     public List<string> RequestFields() {
