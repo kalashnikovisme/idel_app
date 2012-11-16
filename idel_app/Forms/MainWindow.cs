@@ -120,14 +120,28 @@ namespace idel_app {
       rightFunctionPanel.ColumnStyles.Insert(2, new ColumnStyle(SizeType.Absolute, ConstForms.COLUMN_WIDTH / 2));
       rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 80F));
       rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
+      
       AppDataGridView requestDataGridView = new AppDataGridView() {
         Indent = AppDataGridView.ControlIndent.Big
       };
-      List<string> columns = Program.mainMiddleClass.RequestFields();
-      foreach (string c in columns) {
-        requestDataGridView.Columns.Add(c, c);
+      List<string> columnNames = Program.mainMiddleClass.RequestFields();
+      List<DataGridViewTextBoxColumn> columns = new List<DataGridViewTextBoxColumn>();
+      foreach (string c in columnNames) {
+        columns.Add(new DataGridViewTextBoxColumn() { HeaderText = c, AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
       }
+      requestDataGridView.Columns.AddRange(columns.ToArray<DataGridViewColumn>());
+
+      DataGridViewCheckBoxColumn checkColumn = new DataGridViewCheckBoxColumn() {
+        AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+        FillWeight = 20F,
+        ToolTipText = "Отметить выполнение"
+      };
+      requestDataGridView.Columns.Add(checkColumn);
+      requestDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
+      requestDataGridView.DataSource = Program.mainMiddleClass.AllRequests();
       rightFunctionPanel.Controls.Add(requestDataGridView, 0, 0);
+      requestDataGridView.Columns.Remove("Capacity");
+      requestDataGridView.Columns.Remove("Count");
       rightFunctionPanel.SetColumnSpan(requestDataGridView, 2);
     }
 
