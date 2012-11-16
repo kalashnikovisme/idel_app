@@ -71,6 +71,9 @@
     <Compile Include="Controls\OpacityTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\AddRequestWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\ConstForms.cs" />
     <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
@@ -84,16 +87,25 @@
     <Compile Include="Forms\ManagerAppForm.Designer.cs">
       <DependentUpon>ManagerAppForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MiniManagerAppWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Functions\ConstFunctions.cs" />
     <Compile Include="Middle\Const.cs" />
     <Compile Include="Middle\MiddleClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\AddRequestWindow.resx">
+      <DependentUpon>AddRequestWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ManagerAppForm.resx">
       <DependentUpon>ManagerAppForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MiniManagerAppWindow.resx">
+      <DependentUpon>MiniManagerAppWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
