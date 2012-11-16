@@ -140,6 +140,11 @@ namespace idel_app {
       requestDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
       requestDataGridView.DataSource = Program.mainMiddleClass.AllRequests();
       rightFunctionPanel.Controls.Add(requestDataGridView, 0, 0);
+
+      /* В requestDataGrivView откуда не возьмись появляются две колонки capacity и count.
+       откуда они появляются не разобрался, надо исправить. Следующими двумя строками я их убираю. 
+       Появляются они на месте вот этого комментария. 
+       Калашников. */
       requestDataGridView.Columns.Remove("Capacity");
       requestDataGridView.Columns.Remove("Count");
       rightFunctionPanel.SetColumnSpan(requestDataGridView, 2);
