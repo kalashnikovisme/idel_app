@@ -19,6 +19,17 @@ namespace SpecialControls {
       }
     }
 
+
+    private bool intType = false;
+    public bool IntType {
+      get {
+        return intType;
+      }
+      set {
+        intType = value;
+      }
+    }
+
     public DisTextBox() {
       Click += new EventHandler(DisTextBox_Click);
       Leave += new EventHandler(DisTextBox_Leave);
@@ -42,6 +53,12 @@ namespace SpecialControls {
     public bool NotDisText {
       get {
         return (Text != disText);
+      }
+    }
+
+    public bool EmptyText {
+      get {
+        return !(NotDisText);
       }
     }
   }

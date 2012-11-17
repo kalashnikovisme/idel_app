@@ -18,6 +18,8 @@ namespace idel_app {
 
     private FunctionPanel[] functionsGroup;
 
+    private AddRequestWindow addRequestWindow;
+
     public MainWindow() {
       InitializeComponent();
       InitializeMainFunctionPanels();
@@ -146,12 +148,15 @@ namespace idel_app {
     }
 
     private void addRequestButton_Click(object sender, EventArgs e) {
-      AddRequestWindow add = new AddRequestWindow(Program.mainMiddleClass.RequestFields().ToArray<string>());
-      add.FormClosing += new FormClosingEventHandler(add_FormClosing);
+      addRequestWindow = new AddRequestWindow(Program.mainMiddleClass.RequestFields().ToArray<string>());
+      addRequestWindow.SetIntTypeField("id");
+      addRequestWindow.FormClosing += new FormClosingEventHandler(add_FormClosing);
       this.Enabled = false;
     }
 
     private void add_FormClosing(object sender, FormClosingEventArgs e) {
+      Program.mainMiddleClass.AddNewRequest(addRequestWindow.Datas);
+      viewRequests();
       this.Enabled = true;
     }
 

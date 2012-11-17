@@ -19,5 +19,10 @@ namespace idel_app.Middle {
     public List<string> RequestFields() {
       return new List<string>() { "id", "название", "сотрудник" };
     }
+
+    public void AddNewRequest(List<string> newAdd) {
+      List<List<string>> list = AllRequests();
+      list.Add(newAdd);
+    }
   }
 }
