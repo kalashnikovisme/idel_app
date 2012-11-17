@@ -49,6 +49,9 @@
     <Compile Include="Controls\AppDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\OpacityRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ConstControls.cs" />
     <Compile Include="Controls\AppButton.cs">
       <SubType>Component</SubType>
@@ -75,6 +78,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ConstForms.cs" />
+    <Compile Include="Forms\DeleteRequestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DeleteRequestForm.Designer.cs">
+      <DependentUpon>DeleteRequestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +106,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\AddRequestWindow.resx">
       <DependentUpon>AddRequestWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DeleteRequestForm.resx">
+      <DependentUpon>DeleteRequestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>

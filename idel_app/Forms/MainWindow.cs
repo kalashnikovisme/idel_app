@@ -19,6 +19,9 @@ namespace idel_app {
     private FunctionPanel[] functionsGroup;
 
     private AddRequestWindow addRequestWindow;
+    private DeleteRequestForm deleteRequestForm;
+
+    private AppDataGridView requestDataGridView; 
 
     public MainWindow() {
       InitializeComponent();
@@ -125,7 +128,7 @@ namespace idel_app {
       rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 80F));
       rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT * 2));
 
-      AppDataGridView requestDataGridView = initializeRequestDataGridView();
+      requestDataGridView = initializeRequestDataGridView();
       List<List<string>> list = Program.mainMiddleClass.AllRequests();
       foreach (List<string> l in list) {
         requestDataGridView.Rows.Add(l.ToArray<string>());
@@ -144,7 +147,23 @@ namespace idel_app {
         Text = "Удалить заявку",
         Indent = AppButton.ControlIndent.Middle
       };
+      deleteRequestButton.Click += new EventHandler(deleteRequestButton_Click);
       rightFunctionPanel.Controls.Add(deleteRequestButton, 1, 1);
+    }
+
+    private void deleteRequestButton_Click(object sender, EventArgs e) {
+      List<int> indexes = new List<int>();
+      foreach (DataGridViewRow row in requestDataGridView.SelectedRows) {
+        indexes.Add(row.Index);
+      }
+      deleteRequestForm = new DeleteRequestForm(indexes);
+      deleteRequestForm.FormClosing += new FormClosingEventHandler(deleteRequestForm_FormClosing);
+      this.Enabled = false;
+    }
+
+    private void deleteRequestForm_FormClosing(object sender, FormClosingEventArgs e) {
+      this.Enabled = true;
+      viewRequests();
     }
 
     private void addRequestButton_Click(object sender, EventArgs e) {

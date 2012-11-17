@@ -24,5 +24,17 @@ namespace idel_app.Middle {
       List<List<string>> list = AllRequests();
       list.Add(newAdd);
     }
+
+    public void DeleteRequestByIndex(int index) {
+      
+    }
+
+    public void DeleteAll() {
+
+    }
+
+    public void DeletePassedRequests() {
+
+    }
   }
 }
