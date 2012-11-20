@@ -12,9 +12,10 @@ namespace idel_app {
     static void Main() {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
-      Application.Run(new MainWindow());
+      Application.Run(mainWindow = new MainWindow());
     }
 
+    internal static MainWindow mainWindow;
     internal static idel_app.Middle.MiddleClass mainMiddleClass = new Middle.MiddleClass();
   }
 }

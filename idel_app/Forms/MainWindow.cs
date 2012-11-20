@@ -21,13 +21,20 @@ namespace idel_app {
     private AddRequestWindow addRequestWindow;
     private DeleteRequestForm deleteRequestForm;
 
-    private AppDataGridView requestDataGridView; 
+    private AppDataGridView requestDataGridView;
+
+    public event EventHandler DeleteAllRequest;
+    public event EventHandler DeleteCheckedRequest;
+    public event EventHandler DeletePassedRequest;
 
     public MainWindow() {
       InitializeComponent();
       InitializeMainFunctionPanels();
       InitializeFunctionPanelsForFunctions();
       RequestFunctionGroupInitialize();
+      this.DeleteAllRequest += new EventHandler(MainWindow_DeleteAllRequest);
+      this.DeleteCheckedRequest += new EventHandler(MainWindow_DeleteCheckedRequest);
+      this.DeletePassedRequest += new EventHandler(MainWindow_DeletePassedRequest);
     }
 
     /// <summary>
@@ -219,6 +226,24 @@ namespace idel_app {
 
     private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
 
+    }
+
+    private void MainWindow_DeleteAllRequest(object sender, EventArgs e) {
+      Program.mainMiddleClass.DeleteAll();
+      viewRequests();
+    }
+
+    private void MainWindow_DeletePassedRequest(object sender, EventArgs e) {
+      Program.mainMiddleClass.DeletePassedRequests();
+    }
+
+    private void MainWindow_DeleteCheckedRequest(object sender, EventArgs e) {
+      foreach (DataGridViewRow d in requestDataGridView.Rows) {
+        if (d.Selected) {
+          Program.mainMiddleClass.DeleteRequestByIndex(d.Index);
+        }
+      }
+      viewRequests();
     }
   }
 }
