@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace SpecialControls {
+namespace UpgradeControls {
   public class FunctionPanel : TableLayoutPanel {
 
     public FunctionPanel() {

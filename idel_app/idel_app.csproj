@@ -49,6 +49,9 @@
     <Compile Include="Controls\AppDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\IconPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\OpacityRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -72,6 +75,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\OpacityTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PictureLinkLabelBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\AddRequestWindow.cs">
@@ -127,6 +133,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -138,7 +145,39 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\будильник в ст звучания.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\будьлин в ст покоя.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\заметки.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Заявка в ожидания исполнения.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Заявка выполнена.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\календарь.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\пользователь.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\поставщик товара.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\телефон.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\цена.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\иконка приложения.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

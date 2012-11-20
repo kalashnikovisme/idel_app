@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace SpecialControls {
+namespace UpgradeControls {
   public class OpacityLabel : Label {
     public OpacityLabel() {
       this.BackColor = System.Drawing.Color.FromArgb(0, 255, 15, 0);

@@ -1,4 +1,4 @@
-﻿using SpecialControls;
+﻿using UpgradeControls;
 
 namespace idel_app.Forms {
   partial class DeleteRequestForm {
@@ -25,9 +25,9 @@ namespace idel_app.Forms {
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      this.deleteAllCheckRadioButton = new SpecialControls.OpacityRadioButton();
-      this.deleteAllPassedRadioButton = new SpecialControls.OpacityRadioButton();
-      this.deleteAllRadioButton = new SpecialControls.OpacityRadioButton();
+      this.deleteAllCheckRadioButton = new UpgradeControls.OpacityRadioButton();
+      this.deleteAllPassedRadioButton = new UpgradeControls.OpacityRadioButton();
+      this.deleteAllRadioButton = new UpgradeControls.OpacityRadioButton();
       this.button1 = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SpecialControls {
+namespace UpgradeControls {
   public class OpacityRadioButton : RadioButton {
     public OpacityRadioButton() {
       this.BackColor = System.Drawing.Color.FromArgb(0, 255, 15, 0);

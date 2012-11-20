@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SpecialControls {
+namespace UpgradeControls {
   public class AppDataGridView : DataGridView {
     public AppDataGridView() {
       Dock = DockStyle.Fill;

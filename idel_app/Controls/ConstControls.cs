@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SpecialControls {
+namespace UpgradeControls {
   /// <summary>
   /// Класс констант специально для классов контролов
   /// </summary>

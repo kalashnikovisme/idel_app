@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SpecialControls {
+namespace UpgradeControls {
   public class OpacityTextBox : TextBox {
     public OpacityTextBox() {
       Margin = new Padding(ConstControls.CONTROL_INDENT_SMALL);

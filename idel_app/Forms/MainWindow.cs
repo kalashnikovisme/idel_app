@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using idel_app.Forms;
-using SpecialControls;
+using UpgradeControls;
 using idel_app.Functions;
 
 namespace idel_app {
@@ -35,10 +35,6 @@ namespace idel_app {
       this.DeleteAllRequest += new EventHandler(MainWindow_DeleteAllRequest);
       this.DeleteCheckedRequest += new EventHandler(MainWindow_DeleteCheckedRequest);
       this.DeletePassedRequest += new EventHandler(MainWindow_DeletePassedRequest);
-    }
-
-    private void MainWindow_Click(object sender, EventArgs e) {
-      MessageBox.Show(requestDataGridView.SelectedRows[0].Index.ToString());
     }
 
     /// <summary>
@@ -90,17 +86,23 @@ namespace idel_app {
     /// Добавляет контролы управления в поле групп функций для заявок
     /// </summary>
     private void RequestFunctionGroupInitialize() {
-      OpacityLinkLabel[] requestFunctionGroupLinkLabels = new OpacityLinkLabel[ConstFunctions.REQUEST_WORKSPACE_COUNT];
+      for (int i = 0; i < ConstFunctions.REQUEST_WORKSPACE_COUNT + 1; i++) {
+        functionsGroup[ConstFunctions.REQUEST_INDEX].RowStyles.Add(new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
+      }
+      PictureLinkLabelBox[] requestFunctionGroupLinkLabels = new PictureLinkLabelBox[ConstFunctions.REQUEST_WORKSPACE_COUNT];
       for (int i = 0; i < ConstFunctions.REQUEST_WORKSPACE_COUNT; i++) {
-        requestFunctionGroupLinkLabels[i] = new OpacityLinkLabel() {
+        requestFunctionGroupLinkLabels[i] = new PictureLinkLabelBox() {
           Dock = DockStyle.Fill,
           Font = new Font("Times New Roman", 12F),
-          Indent = OpacityLinkLabel.ControlIndent.MemberOfList
+          Indent = PictureLinkLabelBox.ControlIndent.MemberOfList
         };
         functionsGroup[ConstFunctions.REQUEST_INDEX].Controls.AddRange(requestFunctionGroupLinkLabels);
       }
-      requestFunctionGroupLinkLabels[0].Indent = OpacityLinkLabel.ControlIndent.FirstOfList;
-      requestFunctionGroupLinkLabels[requestFunctionGroupLinkLabels.Length - 1].Indent = OpacityLinkLabel.ControlIndent.LastOfList;
+      requestFunctionGroupLinkLabels[0].Indent = PictureLinkLabelBox.ControlIndent.FirstOfList;
+      requestFunctionGroupLinkLabels[0].Image = global::idel_app.Properties.Resources.request_done;
+      requestFunctionGroupLinkLabels[1].Image = idel_app.Properties.Resources.provider;
+      requestFunctionGroupLinkLabels[2].Image = idel_app.Properties.Resources.product;
+      requestFunctionGroupLinkLabels[requestFunctionGroupLinkLabels.Length - 1].Indent = PictureLinkLabelBox.ControlIndent.LastOfList;
 
       List<string> textLinkLabels = new List<string>() { ConstFunctions.REQUEST_VIEW_TITLE, 
                                                          ConstFunctions.REQUEST_PROVIDERS_VIEW_TITLE, 
@@ -223,22 +225,6 @@ namespace idel_app {
       return requestDataGridView;
     }
 
-    private void createRequestButton_Click(object sender, EventArgs e) {
-      throw new NotImplementedException();
-    }
-
-    private void RequestViewProducts_Click(object sender, EventArgs e) {
-      throw new NotImplementedException();
-    }
-
-    private void RequestViewProvider_Click(object sender, EventArgs e) {
-      throw new NotImplementedException();
-    }
-
-    private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
-
-    }
-
     private void MainWindow_DeleteAllRequest(object sender, EventArgs e) {
       Program.mainMiddleClass.DeleteAll();
       viewRequests();
@@ -253,6 +239,18 @@ namespace idel_app {
         Program.mainMiddleClass.DeleteRequestByIndex(d.Index);
       }
       viewRequests();
+    }
+
+    private void createRequestButton_Click(object sender, EventArgs e) {
+      throw new NotImplementedException();
+    }
+
+    private void RequestViewProducts_Click(object sender, EventArgs e) {
+      throw new NotImplementedException();
+    }
+
+    private void RequestViewProvider_Click(object sender, EventArgs e) {
+      throw new NotImplementedException();
     }
   }
 }
