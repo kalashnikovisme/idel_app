@@ -37,6 +37,10 @@ namespace idel_app {
       this.DeletePassedRequest += new EventHandler(MainWindow_DeletePassedRequest);
     }
 
+    private void MainWindow_Click(object sender, EventArgs e) {
+      MessageBox.Show(requestDataGridView.SelectedRows[0].Index.ToString());
+    }
+
     /// <summary>
     /// Инициализирует два основных поля интерфейса
     /// </summary>
@@ -125,6 +129,9 @@ namespace idel_app {
       viewRequests();
     }
 
+    /// <summary>
+    /// Показывает поля работы с заявками
+    /// </summary>
     private void viewRequests() {
       rightFunctionPanel.Controls.Clear();
       rightFunctionPanel.RowCount = 2;      // badcode
@@ -186,6 +193,9 @@ namespace idel_app {
       this.Enabled = true;
     }
 
+    /// <summary>
+    /// Инициализирует DataGridView с заявками
+    /// </summary>
     private AppDataGridView initializeRequestDataGridView() {
       AppDataGridView requestDataGridView = new AppDataGridView() {
         Indent = AppDataGridView.ControlIndent.Middle,
@@ -209,6 +219,7 @@ namespace idel_app {
       requestDataGridView.Columns.Add(checkColumn);
       requestDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
       requestDataGridView.Columns[0].Width = 40;
+      requestDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
       return requestDataGridView;
     }
 
@@ -238,10 +249,8 @@ namespace idel_app {
     }
 
     private void MainWindow_DeleteCheckedRequest(object sender, EventArgs e) {
-      foreach (DataGridViewRow d in requestDataGridView.Rows) {
-        if (d.Selected) {
-          Program.mainMiddleClass.DeleteRequestByIndex(d.Index);
-        }
+      foreach (DataGridViewRow d in requestDataGridView.SelectedRows) {
+        Program.mainMiddleClass.DeleteRequestByIndex(d.Index);
       }
       viewRequests();
     }
