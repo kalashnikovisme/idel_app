@@ -29,6 +29,8 @@ namespace idel_app {
 
     private bool RequestValueChanged = false;
 
+    private const int CheckColumnIndex = 3;
+
     public MainWindow() {
       InitializeComponent();
       InitializeMainFunctionPanels();
@@ -161,19 +163,28 @@ namespace idel_app {
       rightFunctionPanel.Controls.Add(requestDataGridView, 0, 0);
       rightFunctionPanel.SetColumnSpan(requestDataGridView, 3);
 
-      AppButton addRequestButton = new AppButton() {
-        Text = "Добавить заявку",
-        Indent = AppButton.ControlIndent.Middle
-      };
+      AppButton addRequestButton = createAppButton("Добавить заявку");
       addRequestButton.Click += new EventHandler(addRequestButton_Click);
       rightFunctionPanel.Controls.Add(addRequestButton, 0, 1);
 
-      AppButton deleteRequestButton = new AppButton() {
-        Text = "Удалить заявку",
-        Indent = AppButton.ControlIndent.Middle
-      };
+      AppButton deleteRequestButton = createAppButton("Удалить заявку");
       deleteRequestButton.Click += new EventHandler(deleteRequestButton_Click);
       rightFunctionPanel.Controls.Add(deleteRequestButton, 1, 1);
+
+      AppButton passRequestButton = createAppButton("Отметить заявки выполненными");
+      passRequestButton.Click += new EventHandler(passRequestButton_Click);
+      rightFunctionPanel.Controls.Add(passRequestButton);
+    }
+
+    private void passRequestButton_Click(object sender, EventArgs e) {
+      foreach (DataGridViewRow row in requestDataGridView.SelectedRows) {
+        Program.mainMiddleClass.MarkRequestPassed(row.Index);
+        requestDataGridView.Rows[row.Index].Cells[CheckColumnIndex].Value = true;
+      }
+    }
+
+    private AppButton createAppButton(string text) {
+      return new AppButton() { Text = text, Indent = AppButton.ControlIndent.Middle };
     }
 
     private void deleteRequestButton_Click(object sender, EventArgs e) {

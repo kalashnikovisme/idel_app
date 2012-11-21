@@ -40,5 +40,13 @@ namespace idel_app.Middle {
     public void SaveChanges(List<List<string>> changes) {
 
     }
+
+    public void MarkRequestPassed(int index) {
+
+    }
+
+    public void MarkRequestUnPassed(int index) {
+
+    }
   }
 }
