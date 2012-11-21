@@ -36,5 +36,9 @@ namespace idel_app.Middle {
     public void DeletePassedRequests() {
 
     }
+
+    public void SaveChanges(List<List<string>> changes) {
+
+    }
   }
 }

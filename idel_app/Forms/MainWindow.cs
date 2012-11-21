@@ -27,6 +27,8 @@ namespace idel_app {
     public event EventHandler DeleteCheckedRequest;
     public event EventHandler DeletePassedRequest;
 
+    private bool RequestValueChanged = false;
+
     public MainWindow() {
       InitializeComponent();
       InitializeMainFunctionPanels();
@@ -35,6 +37,7 @@ namespace idel_app {
       this.DeleteAllRequest += new EventHandler(MainWindow_DeleteAllRequest);
       this.DeleteCheckedRequest += new EventHandler(MainWindow_DeleteCheckedRequest);
       this.DeletePassedRequest += new EventHandler(MainWindow_DeletePassedRequest);
+      this.FormClosing += new FormClosingEventHandler(MainWindow_FormClosing);
     }
 
     /// <summary>
@@ -189,12 +192,19 @@ namespace idel_app {
     }
 
     private void addRequestButton_Click(object sender, EventArgs e) {
+      AddNewRequest();
+    }
+
+    /// <summary>
+    /// Открывает окно добавления новых заявок
+    /// </summary>
+    private void AddNewRequest() {
       addRequestWindow = new AddRequestWindow(Program.mainMiddleClass.RequestFields().ToArray<string>());
       addRequestWindow.SetIntTypeField("id");
       addRequestWindow.FormClosing += new FormClosingEventHandler(add_FormClosing);
       this.Enabled = false;
     }
-
+    
     private void add_FormClosing(object sender, FormClosingEventArgs e) {
       Program.mainMiddleClass.AddNewRequest(addRequestWindow.Datas);
       viewRequests();
@@ -228,7 +238,13 @@ namespace idel_app {
       requestDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
       requestDataGridView.Columns[0].Width = 40;
       requestDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+      requestDataGridView.CellValueChanged += new DataGridViewCellEventHandler(requestDataGridView_CellValueChanged);
       return requestDataGridView;
+    }
+
+    private void requestDataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+      RequestValueChanged = true;
+      requestDataGridView.CellValueChanged -= new DataGridViewCellEventHandler(requestDataGridView_CellValueChanged);
     }
 
     private void MainWindow_DeleteAllRequest(object sender, EventArgs e) {
@@ -248,7 +264,21 @@ namespace idel_app {
     }
 
     private void createRequestButton_Click(object sender, EventArgs e) {
-      throw new NotImplementedException();
+      AddNewRequest();
+    }
+
+    private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
+      if (RequestValueChanged) {
+        List<List<string>> list = new List<List<string>>();
+        for (int i = 0; i < requestDataGridView.RowCount; i++) {
+          List<string> l = new List<string>();
+          for (int j = 0; j < requestDataGridView.ColumnCount; j++) {
+            l.Add(requestDataGridView.Rows[i].Cells[j].Value.ToString());
+          }
+          list.Add(l);
+        }
+        Program.mainMiddleClass.SaveChanges(list);
+      }
     }
 
     private void RequestViewProducts_Click(object sender, EventArgs e) {
