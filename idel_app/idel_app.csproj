@@ -90,12 +90,6 @@
     <Compile Include="Forms\DeleteRequestForm.Designer.cs">
       <DependentUpon>DeleteRequestForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormForTestingFonts.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormForTestingFonts.Designer.cs">
-      <DependentUpon>FormForTestingFonts.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

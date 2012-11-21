@@ -7,8 +7,10 @@ using System.Windows.Forms;
 
 namespace UpgradeControls {
   public class PictureLinkLabelBox : TableLayoutPanel {
-    private OpacityLinkLabel linkLabel;
-    private IconPictureBox pictureBox;
+    /* public присвоен для использования один раз - это присвоение .Click 
+     Место присвоение отмечено комментарием PublicClick */
+    public OpacityLinkLabel linkLabel;
+    public IconPictureBox pictureBox;
 
     private const int iconSize = 60;
 
@@ -24,6 +26,8 @@ namespace UpgradeControls {
       this.Controls.Add(linkLabel, 1, 0);
       this.SizeChanged += new EventHandler(PictureLinkLabelBox_SizeChanged);
     }
+
+    public delegate void EventHadler(object sender, EventArgs e);
 
     private void PictureLinkLabelBox_SizeChanged(object sender, EventArgs e) {
       pictureBox.Size = new Size(iconSize, iconSize);

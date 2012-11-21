@@ -121,6 +121,12 @@ namespace idel_app {
       functionsGroup[ConstFunctions.REQUEST_INDEX].Controls.Add(createRequestButton);
 
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].Click += new EventHandler(RequestView_Click);
+
+      /* PublicClick */
+      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].linkLabel.Click += new EventHandler(RequestView_Click);
+      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].pictureBox.Click += new EventHandler(RequestView_Click);
+      /* End PublicClick */
+
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PROVIDERS_VIEW_TITLE)].Click += new EventHandler(RequestViewProvider_Click);
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PRODUCTS_VIEW_TITLE)].Click += new EventHandler(RequestViewProducts_Click);
 
@@ -141,8 +147,8 @@ namespace idel_app {
       rightFunctionPanel.ColumnStyles.Insert(0, new ColumnStyle(SizeType.Percent, 33F));
       rightFunctionPanel.ColumnStyles.Insert(1, new ColumnStyle(SizeType.Percent, 33F));
       rightFunctionPanel.ColumnStyles.Insert(2, new ColumnStyle(SizeType.Percent, 33F));
-      rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 80F));
-      rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT * 2));
+      rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 90F));
+      rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
 
       requestDataGridView = initializeRequestDataGridView();
       List<List<string>> list = Program.mainMiddleClass.AllRequests();
