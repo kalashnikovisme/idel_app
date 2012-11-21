@@ -270,15 +270,31 @@ namespace idel_app {
     private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
       if (RequestValueChanged) {
         List<List<string>> list = new List<List<string>>();
-        for (int i = 0; i < requestDataGridView.RowCount; i++) {
+        int RowCount = requestDataGridView.RowCount;
+        if (requestDataGridView.AllowUserToAddRows) {
+          RowCount -= 1;
+        } 
+        for (int i = 0; i < RowCount; i++) {
           List<string> l = new List<string>();
           for (int j = 0; j < requestDataGridView.ColumnCount; j++) {
+            if (checkColumnValueNULL(ref l, i, j)) {
+              l.Add("False");
+              continue;
+            }
             l.Add(requestDataGridView.Rows[i].Cells[j].Value.ToString());
           }
           list.Add(l);
         }
         Program.mainMiddleClass.SaveChanges(list);
       }
+    }
+
+    /// <summary>
+    /// Проверяет checkColumn на наличие null значений
+    /// </summary>
+    /// <returns>true, если указанная ячейка содержит null-значение</returns>
+    private bool checkColumnValueNULL(ref List<string> l, int i, int j) {
+      return ((j == 3) && (requestDataGridView.Rows[i].Cells[j].Value == null));
     }
 
     private void RequestViewProducts_Click(object sender, EventArgs e) {
