@@ -84,19 +84,17 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ConstForms.cs" />
-<<<<<<< HEAD
     <Compile Include="Forms\DeleteRequestForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\DeleteRequestForm.Designer.cs">
       <DependentUpon>DeleteRequestForm.cs</DependentUpon>
-=======
+    </Compile>
     <Compile Include="Forms\FormForTestingFonts.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormForTestingFonts.Designer.cs">
       <DependentUpon>FormForTestingFonts.cs</DependentUpon>
->>>>>>> 6f7602e28b886fa74e70230dacca1b951ecc68d5
     </Compile>
     <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
