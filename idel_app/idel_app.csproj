@@ -80,6 +80,7 @@
     <Compile Include="Controls\PictureLinkLabelBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DB\Request_DB.cs" />
     <Compile Include="Forms\AddRequestWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,7 +111,7 @@
     <Compile Include="Middle\MiddleClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Request\Request.cs" />
+    <Compile Include="BisnessLogic\Request.cs" />
     <EmbeddedResource Include="Forms\AddRequestWindow.resx">
       <DependentUpon>AddRequestWindow.cs</DependentUpon>
     </EmbeddedResource>
