@@ -8,16 +8,27 @@ namespace idel_app.Middle {
   /// Этот класс будет организовывать передачу данных между интерфейсом и "внутренностями"
   /// </summary>
   public class MiddleClass {
+    Request.Request request;
     public List<List<string>> AllRequests() {
       List<List<string>> list = new List<List<string>>();
+      string[] str = new string[RequestFields().Count];
+      for (int i = 0; i < str.Length; i++) {
+        str[i] = "1";
+      }
       for (int i = 0; i < 30; i++) {
-        list.Add(new List<string>() { "1", "name", "employee" });
+        list.Add(str.ToList<string>());
       }
       return list;
     }
 
     public List<string> RequestFields() {
-      return new List<string>() { "id", "название", "сотрудник" };
+      Type type = typeof(Request.Request);
+      var foo = Activator.CreateInstance(type);
+      List<string> list = new List<string>();
+      foreach (System.Reflection.PropertyInfo p in foo.GetType().GetProperties()) {
+        list.Add(p.Name);
+      }
+      return list;
     }
 
     public void AddNewRequest(List<string> newAdd) {

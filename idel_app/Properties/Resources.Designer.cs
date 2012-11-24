@@ -145,7 +145,7 @@ namespace idel_app.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap timer {
             get {
-                object obj = ResourceManager.GetObject("timer", resourceCulture);
+                object obj = ResourceManager.GetObject("passDate", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

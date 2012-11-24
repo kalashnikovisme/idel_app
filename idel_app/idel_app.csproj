@@ -110,6 +110,7 @@
     <Compile Include="Middle\MiddleClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Request\Request.cs" />
     <EmbeddedResource Include="Forms\AddRequestWindow.resx">
       <DependentUpon>AddRequestWindow.cs</DependentUpon>
     </EmbeddedResource>

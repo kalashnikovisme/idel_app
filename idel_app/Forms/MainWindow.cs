@@ -228,7 +228,7 @@ namespace idel_app {
     private AppDataGridView initializeRequestDataGridView() {
       AppDataGridView requestDataGridView = new AppDataGridView() {
         Indent = AppDataGridView.ControlIndent.Middle,
-        Font = new Font("Times New Roman", 15F),
+        Font = new Font("Times New Roman", 11F),
         AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells,
         RowHeadersVisible = false,
         ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
