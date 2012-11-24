@@ -15,6 +15,9 @@ namespace idel_app.DB {
       for (int i = 0; i < 30; i++) {
         list.Add(new Request());
       }
+      Request r = new Request();
+      r.PassDate += new TimeSpan(1, 0, 0, 0);
+      list.Add(r);
       return list;
     }
   }

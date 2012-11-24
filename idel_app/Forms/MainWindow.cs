@@ -160,6 +160,7 @@ namespace idel_app {
       foreach (List<string> l in list) {
         requestDataGridView.Rows.Add(l.ToArray<string>());
       }
+      requestDataGridView.Sort(requestDataGridView.Columns[3], ListSortDirection.Descending);
       rightFunctionPanel.Controls.Add(requestDataGridView, 0, 0);
       rightFunctionPanel.SetColumnSpan(requestDataGridView, 3);
 
