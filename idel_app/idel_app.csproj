@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BisnessLogic\Provider.cs" />
     <Compile Include="Controls\AppDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -80,6 +81,7 @@
     <Compile Include="Controls\PictureLinkLabelBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DB\Provider_DB.cs" />
     <Compile Include="DB\Request_DB.cs" />
     <Compile Include="Forms\AddRequestWindow.cs">
       <SubType>Form</SubType>

@@ -21,7 +21,7 @@ namespace idel_app {
     private AddRequestWindow addRequestWindow;
     private DeleteRequestForm deleteRequestForm;
 
-    private AppDataGridView requestDataGridView;
+    private AppDataGridView workDataGridView;
 
     public event EventHandler DeleteAllRequest;
     public event EventHandler DeleteCheckedRequest;
@@ -29,7 +29,7 @@ namespace idel_app {
 
     private bool RequestValueChanged = false;
 
-    private const int CheckColumnIndex = 3;
+    private int CheckColumnIndex = idel_app.Middle.Const.THERE_IS_NOT;
 
     public MainWindow() {
       InitializeComponent();
@@ -126,15 +126,20 @@ namespace idel_app {
       functionsGroup[ConstFunctions.REQUEST_INDEX].Controls.Add(createRequestButton);
 
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].Click += new EventHandler(RequestView_Click);
-
+      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PRODUCTS_VIEW_TITLE)].Click += new EventHandler(RequestViewProducts_Click);
+      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PROVIDERS_VIEW_TITLE)].Click += new EventHandler(RequestViewProviders_Click);
       /* PublicClick */
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].linkLabel.Click += new EventHandler(RequestView_Click);
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].pictureBox.Click += new EventHandler(RequestView_Click);
+      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PRODUCTS_VIEW_TITLE)].linkLabel.Click += new EventHandler(RequestViewProducts_Click);
+      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PRODUCTS_VIEW_TITLE)].pictureBox.Click += new EventHandler(RequestViewProducts_Click);
+      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PROVIDERS_VIEW_TITLE)].linkLabel.Click += new EventHandler(RequestViewProviders_Click);
+      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PROVIDERS_VIEW_TITLE)].pictureBox.Click += new EventHandler(RequestViewProviders_Click);
       /* End PublicClick */
 
-      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PROVIDERS_VIEW_TITLE)].Click += new EventHandler(RequestViewProvider_Click);
+      requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PROVIDERS_VIEW_TITLE)].Click += new EventHandler(RequestViewProviders_Click);
       requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_PRODUCTS_VIEW_TITLE)].Click += new EventHandler(RequestViewProducts_Click);
-
+      
       createRequestButton.Click += new EventHandler(createRequestButton_Click);
     }
 
@@ -155,14 +160,14 @@ namespace idel_app {
       rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 90F));
       rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
 
-      requestDataGridView = initializeRequestDataGridView();
+      workDataGridView = initializeRequestDataGridView();
       List<List<string>> list = Program.mainMiddleClass.AllRequests();
       foreach (List<string> l in list) {
-        requestDataGridView.Rows.Add(l.ToArray<string>());
+        workDataGridView.Rows.Add(l.ToArray<string>());
       }
-      requestDataGridView.Sort(requestDataGridView.Columns[3], ListSortDirection.Descending);
-      rightFunctionPanel.Controls.Add(requestDataGridView, 0, 0);
-      rightFunctionPanel.SetColumnSpan(requestDataGridView, 3);
+      workDataGridView.Sort(workDataGridView.Columns[3], ListSortDirection.Descending);
+      rightFunctionPanel.Controls.Add(workDataGridView, 0, 0);
+      rightFunctionPanel.SetColumnSpan(workDataGridView, 3);
 
       AppButton addRequestButton = createAppButton("Добавить заявку");
       addRequestButton.Click += new EventHandler(addRequestButton_Click);
@@ -178,9 +183,9 @@ namespace idel_app {
     }
 
     private void passRequestButton_Click(object sender, EventArgs e) {
-      foreach (DataGridViewRow row in requestDataGridView.SelectedRows) {
+      foreach (DataGridViewRow row in workDataGridView.SelectedRows) {
         Program.mainMiddleClass.MarkRequestPassed(row.Index);
-        requestDataGridView.Rows[row.Index].Cells[CheckColumnIndex].Value = true;
+        workDataGridView.Rows[row.Index].Cells[CheckColumnIndex].Value = true;
       }
     }
 
@@ -190,7 +195,7 @@ namespace idel_app {
 
     private void deleteRequestButton_Click(object sender, EventArgs e) {
       List<int> indexes = new List<int>();
-      foreach (DataGridViewRow row in requestDataGridView.SelectedRows) {
+      foreach (DataGridViewRow row in workDataGridView.SelectedRows) {
         indexes.Add(row.Index);
       }
       deleteRequestForm = new DeleteRequestForm(indexes);
@@ -248,15 +253,16 @@ namespace idel_app {
       };
       requestDataGridView.Columns.Add(checkColumn);
       requestDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
-      requestDataGridView.Columns[0].Width = 40;
       requestDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+      requestDataGridView.Columns[0].Width = 40;
       requestDataGridView.CellValueChanged += new DataGridViewCellEventHandler(requestDataGridView_CellValueChanged);
+      CheckColumnIndex = requestDataGridView.Columns.Count - 1;
       return requestDataGridView;
     }
 
     private void requestDataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
       RequestValueChanged = true;
-      requestDataGridView.CellValueChanged -= new DataGridViewCellEventHandler(requestDataGridView_CellValueChanged);
+      workDataGridView.CellValueChanged -= new DataGridViewCellEventHandler(requestDataGridView_CellValueChanged);
     }
 
     private void MainWindow_DeleteAllRequest(object sender, EventArgs e) {
@@ -269,7 +275,7 @@ namespace idel_app {
     }
 
     private void MainWindow_DeleteCheckedRequest(object sender, EventArgs e) {
-      foreach (DataGridViewRow d in requestDataGridView.SelectedRows) {
+      foreach (DataGridViewRow d in workDataGridView.SelectedRows) {
         Program.mainMiddleClass.DeleteRequestByIndex(d.Index);
       }
       viewRequests();
@@ -282,18 +288,18 @@ namespace idel_app {
     private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
       if (RequestValueChanged) {
         List<List<string>> list = new List<List<string>>();
-        int RowCount = requestDataGridView.RowCount;
-        if (requestDataGridView.AllowUserToAddRows) {
+        int RowCount = workDataGridView.RowCount;
+        if (workDataGridView.AllowUserToAddRows) {
           RowCount -= 1;
         } 
         for (int i = 0; i < RowCount; i++) {
           List<string> l = new List<string>();
-          for (int j = 0; j < requestDataGridView.ColumnCount; j++) {
+          for (int j = 0; j < workDataGridView.ColumnCount; j++) {
             if (checkColumnValueNULL(ref l, i, j)) {
               l.Add("False");
               continue;
             }
-            l.Add(requestDataGridView.Rows[i].Cells[j].Value.ToString());
+            l.Add(workDataGridView.Rows[i].Cells[j].Value.ToString());
           }
           list.Add(l);
         }
@@ -306,14 +312,66 @@ namespace idel_app {
     /// </summary>
     /// <returns>true, если указанная ячейка содержит null-значение</returns>
     private bool checkColumnValueNULL(ref List<string> l, int i, int j) {
-      return ((j == 3) && (requestDataGridView.Rows[i].Cells[j].Value == null));
+      return ((j == 3) && (workDataGridView.Rows[i].Cells[j].Value == null));
     }
 
+    private void viewProviders() {
+      rightFunctionPanel.Controls.Clear();
+      rightFunctionPanel.RowCount = 2;      // badcode
+      rightFunctionPanel.ColumnCount = 3;   // badcode
+      rightFunctionPanel.ColumnStyles.Insert(0, new ColumnStyle(SizeType.Percent, 33F));
+      rightFunctionPanel.ColumnStyles.Insert(1, new ColumnStyle(SizeType.Percent, 33F));
+      rightFunctionPanel.ColumnStyles.Insert(2, new ColumnStyle(SizeType.Percent, 33F));
+      rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 90F));
+      rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
+
+      workDataGridView = initializeProviderDataGridView();
+      rightFunctionPanel.Controls.Add(workDataGridView, 0, 0);
+      rightFunctionPanel.SetColumnSpan(workDataGridView, 3);
+
+      List<List<string>> list = Program.mainMiddleClass.AllProviders();
+      foreach (List<string> l in list) {
+        workDataGridView.Rows.Add(l.ToArray<string>());
+      }
+
+      AppButton addProviderButton = createAppButton("Добавить поставщика");
+      addProviderButton.Click += new EventHandler(addProviderButton_Click);
+      rightFunctionPanel.Controls.Add(addProviderButton, 0, 1);
+    }
+
+    private void addProviderButton_Click(object sender, EventArgs e) {
+      addRequestWindow = new AddRequestWindow(Program.mainMiddleClass.RequestFields().ToArray<string>());
+      addRequestWindow.SetIntTypeField("id");
+      addRequestWindow.FormClosing += new FormClosingEventHandler(add_FormClosing);
+      this.Enabled = false;
+    }
+
+    private AppDataGridView initializeProviderDataGridView() {
+      AppDataGridView providerDataGridView = new AppDataGridView() {
+        Indent = AppDataGridView.ControlIndent.Middle,
+        Font = new Font("Times New Roman", 11F),
+        AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells,
+        RowHeadersVisible = false,
+        ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+      };
+      List<string> columnNames = Program.mainMiddleClass.RequestFields();
+      List<DataGridViewTextBoxColumn> columns = new List<DataGridViewTextBoxColumn>();
+      foreach (string c in columnNames) {
+        columns.Add(new DataGridViewTextBoxColumn() { HeaderText = c, AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+      }
+      providerDataGridView.Columns.AddRange(columns.ToArray<DataGridViewColumn>());
+
+      providerDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
+      providerDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+      providerDataGridView.Columns[0].Width = 40;
+      return providerDataGridView;
+    }
+
+    private void RequestViewProviders_Click(object sender, EventArgs e) {
+      viewProviders();  
+    }
+    
     private void RequestViewProducts_Click(object sender, EventArgs e) {
-      throw new NotImplementedException();
-    }
-
-    private void RequestViewProvider_Click(object sender, EventArgs e) {
       throw new NotImplementedException();
     }
   }

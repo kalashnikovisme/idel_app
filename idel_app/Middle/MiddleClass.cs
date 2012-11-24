@@ -11,14 +11,14 @@ namespace idel_app.Middle {
   /// Этот класс будет организовывать передачу данных между интерфейсом и "внутренностями"
   /// </summary>
   public class MiddleClass {
-    private List<Request> requests;
+    #region RequestMethods
     /// <summary>
     /// Получает все запросы
     /// </summary>
     /// <returns></returns>
     public List<List<string>> AllRequests() {
       Request_DB db = new Request_DB();
-      requests = db.GetAllRequestFromDB();
+      List<Request> requests = db.GetAllRequestFromDB();
       List<List<string>> list = new List<List<string>>();
       foreach (Request r in requests) {
         List<string> l = new List<string>();
@@ -35,13 +35,7 @@ namespace idel_app.Middle {
     /// Запрашивает все поля заявки. Рефлексивно.
     /// </summary>
     public List<string> RequestFields() {
-      Type type = typeof(BisnessLogic.Request);
-      var foo = Activator.CreateInstance(type);
-      List<string> list = new List<string>();
-      foreach (System.Reflection.PropertyInfo p in foo.GetType().GetProperties()) {
-        list.Add(p.Name);
-      }
-      return list;
+      return TypeFields(typeof(BisnessLogic.Request));
     }
 
     public void AddNewRequest(List<string> newAdd) {
@@ -71,6 +65,40 @@ namespace idel_app.Middle {
 
     public void MarkRequestUnPassed(int index) {
 
+    }
+
+    #endregion
+
+    #region Provider Methods
+
+    public List<string> ProviderFields() {
+      return TypeFields(typeof(Provider));
+    }
+
+    public List<List<string>> AllProviders() {
+      Provider_DB db = new Provider_DB();
+      List<Provider> providers = db.GetAllProviderFromDB();
+      List<List<string>> list = new List<List<string>>();
+      foreach (Provider p in providers) {
+        List<string> l = new List<string>();
+        object[] obj = p.Properites();
+        for (int i = 0; i < obj.Length; i++) {
+          l.Add(obj[i].ToString());
+        }
+        list.Add(l);
+      }
+      return list;
+    }
+
+    #endregion
+
+    private List<string> TypeFields(Type type) {
+      var foo = Activator.CreateInstance(type);
+      List<string> list = new List<string>();
+      foreach (System.Reflection.PropertyInfo p in foo.GetType().GetProperties()) {
+        list.Add(p.Name);
+      }
+      return list;
     }
   }
 }
