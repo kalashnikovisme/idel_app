@@ -6,43 +6,43 @@ using idel_app.Middle;
 
 namespace idel_app.BisnessLogic {
   public class Provider {
-    private int id = Const.THERE_IS_NOT;
+    private BusinessProperity id = new BusinessProperity(Const.THERE_IS_NOT, "Id");
     public int Id {
       get {
-        return id;
+        return Int32.Parse(id.Properity.ToString());
       }
       set {
-        id = value;
+        id.Properity = value;
       }
     }
 
-    private string title = "";
+    private BusinessProperity title = new BusinessProperity("", "Имя");
     public string Title {
       get {
-        return title;
+        return title.Properity.ToString();
       }
       set {
-        title = value;
+        title.Properity = value;
       }
     }
 
-    private string phone = "";
+    private BusinessProperity phone = new BusinessProperity("", "Телефон");
     public string Phone {
       get {
-        return phone;
+        return phone.Properity.ToString();
       }
       set {
-        phone = value;
+        phone.Properity = value;
       }
     }
 
-    private string email = "";
+    private BusinessProperity email = new BusinessProperity("", "Email");
     public string Email {
       get {
-        return email;
+        return email.Properity.ToString();
       }
       set {
-        email = value;
+        email.Properity = value;
       }
     }
 
@@ -62,6 +62,10 @@ namespace idel_app.BisnessLogic {
 
     public object[] Properites() {
       return new object[] { Id, Title, Phone, Email };
+    }
+
+    public List<string> ProperitesNames() {
+      return new List<string>() { id.Name, title.Name, phone.Name, email.Name };
     }
   }
 }

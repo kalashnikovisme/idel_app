@@ -15,7 +15,7 @@ namespace idel_app.Functions {
     public const int REQUEST_WORKSPACE_COUNT = 3;
 
     public const string REQUEST_VIEW_TITLE = "Заявки";
-    public const string REQUEST_PROVIDERS_VIEW_TITLE = "Список поставщиков";
+    public const string REQUEST_PROVIDERS_VIEW_TITLE = "Поставщики";
     public const string REQUEST_PRODUCTS_VIEW_TITLE = "Виды товаров";
   }
 }

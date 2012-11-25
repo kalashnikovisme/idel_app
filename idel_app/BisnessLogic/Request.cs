@@ -10,115 +10,90 @@ namespace idel_app.BisnessLogic {
     
     #region Properites
 
-    private int id = Const.THERE_IS_NOT;
+    private BusinessProperity id = new BusinessProperity(Const.THERE_IS_NOT, "Id");
     public int Id {
       get {
-        return id;
+        return Int32.Parse(id.Properity.ToString());
       }
       set {
-        id = value;
+        id.Properity = value;
       }
     }
 
-    private string title = "";
-    public string Title {
-      get {
-        return title;
-      }
-      set {
-        title = value;
-      }
-    }
-
-    private DateTime createDate = new DateTime();
+    private BusinessProperity createDate = new BusinessProperity(new DateTime(), "Дата создания");
     public DateTime CreateDate {
       get {
-        return createDate;
+        return DateTime.Parse(createDate.Properity.ToString());
       }
       set {
-        createDate = value;
+        createDate.Properity = value;
       }
     }
 
-    private DateTime passDate = new DateTime();
+    private BusinessProperity passDate = new BusinessProperity(new DateTime(), "Дата сдачи");
     public DateTime PassDate {
       get {
-        return passDate;
+        return DateTime.Parse(passDate.Properity.ToString());
       }
       set {
-        passDate = value;
+        passDate.Properity = value;
       }
     }
 
-    private string employee = "";
+    private BusinessProperity employee = new BusinessProperity("", "Ответственный");
     public string Employee {
       get {
-        return employee;
+        return employee.Properity.ToString();
       }
       set {
-        employee = value;
+        employee.Properity = value;
       }
     }
 
-    private string product = "";
+    private BusinessProperity product = new BusinessProperity("", "Продукт");
     public string Product {
       get {
-        return product;
+        return product.Properity.ToString();
       }
       set {
-        product = value;
+        product.Properity = value;
       }
     }
 
-    private int count = Const.THERE_IS_NOT;
+    private BusinessProperity count = new BusinessProperity(Const.THERE_IS_NOT, "Количество");
     public int Count {
       get {
-        return count;
+        return Int32.Parse(count.Properity.ToString());
       }
       set {
-        count = value;
+        count.Properity = value;
       }
     }
 
-    private string provider = "";
+    private BusinessProperity provider = new BusinessProperity("", "Поставщик");
     public string Provider {
       get {
-        return provider;
+        return provider.Properity.ToString();
       }
       set {
-        provider = value;
+        provider.Properity = value;
       }
     }
 
     public enum WareHouseStatus { Wait, Entered };
-    private WareHouseStatus wareHouseStatus = WareHouseStatus.Wait;
-    public WareHouseStatus WareStatus {
-      get {
-        return wareHouseStatus;
-      }
-      set {
-        wareHouseStatus = value;
-      }
-    }
+    /* badcode */
+    public BusinessProperity wareStatus = new BusinessProperity(WareHouseStatus.Wait, "Поступление на склад");
 
     public enum RequestStatus { Wait, Passed, Late, Cancelled };
-    private RequestStatus requestStatus = RequestStatus.Wait;
-    public RequestStatus Status {
-      get {
-        return requestStatus;
-      }
-      set {
-        requestStatus = value;
-      }
-    }
+    public BusinessProperity RequestPassStatus = new BusinessProperity(RequestStatus.Wait, "Статус");
 
-    private string comment = "";
+    private BusinessProperity comment = new BusinessProperity("", "Комментарии");
     public string Comment {
       get {
-        return comment;
+        return comment.Properity.ToString();
       }
       set {
-        comment = value;
+        comment.Properity = value;
       }
     }
 
@@ -127,34 +102,36 @@ namespace idel_app.BisnessLogic {
     public Request(int _id, string _title, DateTime _createDate, DateTime _passDate, string _employee, string _product, 
                    string _provider, int _count, WareHouseStatus _wareHouseStatus, RequestStatus _requestStatus, string _comment) {
       Id = _id;
-      title = _title;
-      createDate = _createDate;
-      passDate = _passDate;
-      employee = _employee;
-      product = _product;
-      provider = _provider;
-      count = _count;
-      wareHouseStatus = _wareHouseStatus;
-      requestStatus = _requestStatus;
-      comment = _comment;
+      CreateDate = _createDate;
+      PassDate = _passDate;
+      Employee = _employee;
+      Product = _product;
+      Provider = _provider;
+      Count = _count;
+      wareStatus.Properity = _wareHouseStatus;
+      RequestPassStatus.Properity = _requestStatus;
+      Comment = _comment;
     }
 
     public Request() {
       Id = 0;
-      title = "Destroy rebels";
-      createDate = DateTime.Today;
-      passDate = DateTime.Today + new TimeSpan(1, 0, 0, 0);
-      employee = "Sidius";
-      product = "DeathStar";
-      provider = "Darth Vader";
-      count = 1;
-      wareHouseStatus = WareHouseStatus.Wait;
-      requestStatus = RequestStatus.Wait;
-      comment = "Work in progress, master!";
+      CreateDate = DateTime.Today;
+      PassDate = DateTime.Today + new TimeSpan(1, 0, 0, 0);
+      Employee = "Sidius";
+      Product = "DeathStar";
+      Provider = "Dark Emperror";
+      Count = 1;
+      wareStatus.Properity = WareHouseStatus.Wait;
+      RequestPassStatus.Properity = RequestStatus.Wait;
+      Comment = "Work in progress, master!";
     }
 
     public object[] Properites() {
-      return new object[] { id, title, createDate, passDate, employee, product, count, provider, wareHouseStatus, requestStatus, comment };
+      return new object[] { Id, CreateDate, PassDate, employee, product, count, Provider, wareStatus, RequestPassStatus, Comment };
+    }
+
+    public List<string> ProperitesNames() {
+      return new List<string>() { id.Name, createDate.Name, passDate.Name, employee.Name, product.Name, provider.Name, count.Name,                               };
     }
   }
 }

@@ -18,9 +18,9 @@ namespace idel_app {
 
     private FunctionPanel[] functionsGroup;
 
-    private AddRequestWindow addRequestWindow;
+    private AddDataForm addDataForm;
     private DeleteRequestForm deleteRequestForm;
-
+    private DeleteProviderForm deleteProviderForm;
     private AppDataGridView workDataGridView;
 
     public event EventHandler DeleteAllRequest;
@@ -105,7 +105,7 @@ namespace idel_app {
       }
       requestFunctionGroupLinkLabels[0].Indent = PictureLinkLabelBox.ControlIndent.FirstOfList;
       requestFunctionGroupLinkLabels[0].Image = global::idel_app.Properties.Resources.request_done;
-      requestFunctionGroupLinkLabels[1].Image = idel_app.Properties.Resources.provider;
+      requestFunctionGroupLinkLabels[1].Image = idel_app.Properties.Resources.provider1;
       requestFunctionGroupLinkLabels[2].Image = idel_app.Properties.Resources.product;
       requestFunctionGroupLinkLabels[requestFunctionGroupLinkLabels.Length - 1].Indent = PictureLinkLabelBox.ControlIndent.LastOfList;
 
@@ -216,14 +216,14 @@ namespace idel_app {
     /// Открывает окно добавления новых заявок
     /// </summary>
     private void AddNewRequest() {
-      addRequestWindow = new AddRequestWindow(Program.mainMiddleClass.RequestFields().ToArray<string>());
-      addRequestWindow.SetIntTypeField("id");
-      addRequestWindow.FormClosing += new FormClosingEventHandler(add_FormClosing);
+      addDataForm = new AddDataForm(Program.mainMiddleClass.RequestFields().ToArray<string>());
+      addDataForm.SetIntTypeField("id");
+      addDataForm.FormClosing += new FormClosingEventHandler(add_FormClosing);
       this.Enabled = false;
     }
     
     private void add_FormClosing(object sender, FormClosingEventArgs e) {
-      Program.mainMiddleClass.AddNewRequest(addRequestWindow.Datas);
+      Program.mainMiddleClass.AddNewRequest(addDataForm.Datas);
       viewRequests();
       this.Enabled = true;
     }
@@ -337,13 +337,38 @@ namespace idel_app {
       AppButton addProviderButton = createAppButton("Добавить поставщика");
       addProviderButton.Click += new EventHandler(addProviderButton_Click);
       rightFunctionPanel.Controls.Add(addProviderButton, 0, 1);
+
+      AppButton deleteProviderButton = createAppButton("Удалить поставщика");
+      deleteProviderButton.Click += new EventHandler(deleteProviderButton_Click);
+      rightFunctionPanel.Controls.Add(deleteProviderButton, 1, 1);
+    }
+
+    private void deleteProviderButton_Click(object sender, EventArgs e) {
+      List<int> indexes = new List<int>();
+      foreach (DataGridViewRow row in workDataGridView.SelectedRows) {
+        indexes.Add(row.Index);
+      }
+      deleteProviderForm = new DeleteProviderForm(indexes);
+      deleteProviderForm.FormClosing += new FormClosingEventHandler(deleteProviderForm_FormClosing);
+      this.Enabled = false;
+    }
+
+    private void deleteProviderForm_FormClosing(object sender, FormClosingEventArgs e) {
+      this.Enabled = true;
+      viewProviders();
     }
 
     private void addProviderButton_Click(object sender, EventArgs e) {
-      addRequestWindow = new AddRequestWindow(Program.mainMiddleClass.RequestFields().ToArray<string>());
-      addRequestWindow.SetIntTypeField("id");
-      addRequestWindow.FormClosing += new FormClosingEventHandler(add_FormClosing);
+      addDataForm = new AddDataForm(Program.mainMiddleClass.ProviderFields().ToArray<string>());
+      addDataForm.SetIntTypeField("id");
+      addDataForm.FormClosing += new FormClosingEventHandler(addProviderDataForm_FormClosing);
       this.Enabled = false;
+    }
+
+    private void addProviderDataForm_FormClosing(object sender, FormClosingEventArgs e) {
+      Program.mainMiddleClass.AddNewRequest(addDataForm.Datas);
+      viewProviders();
+      this.Enabled = true;
     }
 
     private AppDataGridView initializeProviderDataGridView() {
@@ -354,7 +379,7 @@ namespace idel_app {
         RowHeadersVisible = false,
         ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
       };
-      List<string> columnNames = Program.mainMiddleClass.RequestFields();
+      List<string> columnNames = Program.mainMiddleClass.ProviderFields();
       List<DataGridViewTextBoxColumn> columns = new List<DataGridViewTextBoxColumn>();
       foreach (string c in columnNames) {
         columns.Add(new DataGridViewTextBoxColumn() { HeaderText = c, AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });

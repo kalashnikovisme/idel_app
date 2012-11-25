@@ -44,13 +44,13 @@ namespace idel_app.Forms {
       this.deleteAllCheckRadioButton.Text = "Удалить выделенные заявки";
       this.deleteAllCheckRadioButton.UseVisualStyleBackColor = true;
       // 
-      // deleteAllPassedRadioButton
+      // deleteAllRadioButton
       // 
       this.deleteAllPassedRadioButton.AutoSize = true;
       this.deleteAllPassedRadioButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(15)))), ((int)(((byte)(0)))));
       this.deleteAllPassedRadioButton.Font = new System.Drawing.Font("Times New Roman", 12F);
       this.deleteAllPassedRadioButton.Location = new System.Drawing.Point(12, 35);
-      this.deleteAllPassedRadioButton.Name = "deleteAllPassedRadioButton";
+      this.deleteAllPassedRadioButton.Name = "deleteAllRadioButton";
       this.deleteAllPassedRadioButton.Size = new System.Drawing.Size(256, 23);
       this.deleteAllPassedRadioButton.TabIndex = 1;
       this.deleteAllPassedRadioButton.TabStop = true;

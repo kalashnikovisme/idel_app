@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BisnessLogic\BusinessProperity.cs" />
     <Compile Include="BisnessLogic\Provider.cs" />
     <Compile Include="Controls\AppDataGridView.cs">
       <SubType>Component</SubType>
@@ -83,10 +84,13 @@
     </Compile>
     <Compile Include="DB\Provider_DB.cs" />
     <Compile Include="DB\Request_DB.cs" />
-    <Compile Include="Forms\AddRequestWindow.cs">
+    <Compile Include="Forms\AddDataForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ConstForms.cs" />
+    <Compile Include="Forms\DeleteProviderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\DeleteRequestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,8 +118,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BisnessLogic\Request.cs" />
-    <EmbeddedResource Include="Forms\AddRequestWindow.resx">
-      <DependentUpon>AddRequestWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\DeleteProviderForm.resx">
+      <DependentUpon>DeleteProviderForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DeleteRequestForm.resx">
       <DependentUpon>DeleteRequestForm.cs</DependentUpon>
@@ -171,9 +175,6 @@
     <None Include="Resources\пользователь.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\поставщик товара.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\телефон.png" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\иконка приложения.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\поставщик товара.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

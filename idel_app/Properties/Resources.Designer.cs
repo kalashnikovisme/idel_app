@@ -113,9 +113,9 @@ namespace idel_app.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap provider {
+        internal static System.Drawing.Bitmap provider1 {
             get {
-                object obj = ResourceManager.GetObject("provider", resourceCulture);
+                object obj = ResourceManager.GetObject("provider1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -145,7 +145,7 @@ namespace idel_app.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap timer {
             get {
-                object obj = ResourceManager.GetObject("passDate", resourceCulture);
+                object obj = ResourceManager.GetObject("timer", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

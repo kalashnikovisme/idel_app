@@ -17,8 +17,7 @@ namespace idel_app.Middle {
     /// </summary>
     /// <returns></returns>
     public List<List<string>> AllRequests() {
-      Request_DB db = new Request_DB();
-      List<Request> requests = db.GetAllRequestFromDB();
+      List<Request> requests = Request_DB.GetAllRequestFromDB();
       List<List<string>> list = new List<List<string>>();
       foreach (Request r in requests) {
         List<string> l = new List<string>();
@@ -72,12 +71,12 @@ namespace idel_app.Middle {
     #region Provider Methods
 
     public List<string> ProviderFields() {
-      return TypeFields(typeof(Provider));
+      Provider p = new Provider();
+      return p.ProperitesNames();
     }
 
     public List<List<string>> AllProviders() {
-      Provider_DB db = new Provider_DB();
-      List<Provider> providers = db.GetAllProviderFromDB();
+      List<Provider> providers = Provider_DB.GetAllProviderFromDB();
       List<List<string>> list = new List<List<string>>();
       foreach (Provider p in providers) {
         List<string> l = new List<string>();
@@ -89,6 +88,9 @@ namespace idel_app.Middle {
       }
       return list;
     }
+
+    public void AddNewProvider(List<string> newAdd) { }
+
 
     #endregion
 
