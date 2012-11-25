@@ -60,16 +60,6 @@ namespace idel_app.BisnessLogic {
       }
     }
 
-    private BusinessProperity count = new BusinessProperity(Const.THERE_IS_NOT, "Количество");
-    public int Count {
-      get {
-        return Int32.Parse(count.Properity.ToString());
-      }
-      set {
-        count.Properity = value;
-      }
-    }
-
     private BusinessProperity provider = new BusinessProperity("", "Поставщик");
     public string Provider {
       get {
@@ -80,12 +70,35 @@ namespace idel_app.BisnessLogic {
       }
     }
 
-    public enum WareHouseStatus { Wait, Entered };
-    /* badcode */
-    public BusinessProperity wareStatus = new BusinessProperity(WareHouseStatus.Wait, "Поступление на склад");
+    private BusinessProperity count = new BusinessProperity(Const.THERE_IS_NOT, "Количество");
+    public int Count {
+      get {
+        return Int32.Parse(count.Properity.ToString());
+      }
+      set {
+        count.Properity = value;
+      }
+    }
 
-    public enum RequestStatus { Wait, Passed, Late, Cancelled };
-    public BusinessProperity RequestPassStatus = new BusinessProperity(RequestStatus.Wait, "Статус");
+    private BusinessProperity wareStatus = new BusinessProperity(BLogicConst.REQUEST_WAIT_WARE, "Cклад");
+    public bool WareStatus {
+      get {
+        return Boolean.Parse(wareStatus.Properity.ToString());
+      }
+      set {
+        wareStatus.Properity = value;
+      }
+    }
+
+    private BusinessProperity requestPassStatus = new BusinessProperity(BLogicConst.REQUEST_WAIT, "Статус");
+    public bool RequestPassStatus {
+      get {
+        return Boolean.Parse(requestPassStatus.Properity.ToString());
+      }
+      set {
+        requestPassStatus.Properity = value;
+      }
+    }
 
     private BusinessProperity comment = new BusinessProperity("", "Комментарии");
     public string Comment {
@@ -100,7 +113,7 @@ namespace idel_app.BisnessLogic {
     #endregion
 
     public Request(int _id, string _title, DateTime _createDate, DateTime _passDate, string _employee, string _product, 
-                   string _provider, int _count, WareHouseStatus _wareHouseStatus, RequestStatus _requestStatus, string _comment) {
+                   string _provider, int _count, bool _wareHouseStatus, bool _requestStatus, string _comment) {
       Id = _id;
       CreateDate = _createDate;
       PassDate = _passDate;
@@ -108,8 +121,8 @@ namespace idel_app.BisnessLogic {
       Product = _product;
       Provider = _provider;
       Count = _count;
-      wareStatus.Properity = _wareHouseStatus;
-      RequestPassStatus.Properity = _requestStatus;
+      WareStatus = _wareHouseStatus;
+      RequestPassStatus = _requestStatus;
       Comment = _comment;
     }
 
@@ -118,20 +131,20 @@ namespace idel_app.BisnessLogic {
       CreateDate = DateTime.Today;
       PassDate = DateTime.Today + new TimeSpan(1, 0, 0, 0);
       Employee = "Sidius";
-      Product = "DeathStar";
+      Product = "Death Star";
       Provider = "Dark Emperror";
       Count = 1;
-      wareStatus.Properity = WareHouseStatus.Wait;
-      RequestPassStatus.Properity = RequestStatus.Wait;
+      WareStatus = BLogicConst.REQUEST_WAIT_WARE;
+      RequestPassStatus = BLogicConst.REQUEST_WAIT;
       Comment = "Work in progress, master!";
     }
 
     public object[] Properites() {
-      return new object[] { Id, CreateDate, PassDate, employee, product, count, Provider, wareStatus, RequestPassStatus, Comment };
+      return new object[] { Id, CreateDate, PassDate, Employee, Product, Count, Provider, WareStatus, RequestPassStatus, Comment };
     }
 
     public List<string> ProperitesNames() {
-      return new List<string>() { id.Name, createDate.Name, passDate.Name, employee.Name, product.Name, provider.Name, count.Name,                               };
+      return new List<string>() { id.Name, createDate.Name, passDate.Name, employee.Name, product.Name, count.Name, provider.Name };
     }
   }
 }

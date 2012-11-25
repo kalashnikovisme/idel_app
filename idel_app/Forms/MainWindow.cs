@@ -242,6 +242,7 @@ namespace idel_app {
       List<string> columnNames = Program.mainMiddleClass.RequestFields();
       List<DataGridViewTextBoxColumn> columns = new List<DataGridViewTextBoxColumn>();
       foreach (string c in columnNames) {
+        if ()
         columns.Add(new DataGridViewTextBoxColumn() { HeaderText = c, AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
       }
       requestDataGridView.Columns.AddRange(columns.ToArray<DataGridViewColumn>());

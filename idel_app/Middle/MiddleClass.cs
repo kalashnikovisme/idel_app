@@ -34,7 +34,8 @@ namespace idel_app.Middle {
     /// Запрашивает все поля заявки. Рефлексивно.
     /// </summary>
     public List<string> RequestFields() {
-      return TypeFields(typeof(BisnessLogic.Request));
+      Request r = new Request();
+      return r.ProperitesNames();
     }
 
     public void AddNewRequest(List<string> newAdd) {

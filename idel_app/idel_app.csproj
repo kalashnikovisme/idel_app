@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BisnessLogic\BLogicConst.cs" />
     <Compile Include="BisnessLogic\BusinessProperity.cs" />
     <Compile Include="BisnessLogic\Provider.cs" />
     <Compile Include="Controls\AppDataGridView.cs">
