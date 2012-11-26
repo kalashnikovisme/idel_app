@@ -83,6 +83,7 @@
     <Compile Include="Controls\PictureLinkLabelBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DB\CommandTo1C.cs" />
     <Compile Include="DB\Provider_DB.cs" />
     <Compile Include="DB\Request_DB.cs" />
     <Compile Include="Forms\AddDataForm.cs">
@@ -186,6 +187,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\поставщик товара.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="V82">
+      <Guid>{2EC2A380-9200-4067-AE35-A6586D1B2888}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
