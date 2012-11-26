@@ -23,16 +23,16 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      this.SuspendLayout();
-      // 
-      // MainWindow
-      // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(700, 400);
-      this.Name = "MainWindow";
-      this.Text = "MainWindow";
-      this.ResumeLayout(false);
+            this.SuspendLayout();
+            // 
+            // MainWindow
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(820, 509);
+            this.Name = "MainWindow";
+            this.Text = "MainWindow";
+            this.ResumeLayout(false);
 
     }
 

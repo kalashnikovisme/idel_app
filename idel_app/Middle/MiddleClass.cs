@@ -95,6 +95,29 @@ namespace idel_app.Middle {
 
     #endregion
 
+    #region Product Methods
+
+    public List<string> ProductFields() {
+      Product p = new Product();
+      return p.ProperitesNames();
+    }
+
+    public List<List<string>> AllProducts() {
+      List<Product> providers = Product_DB.GetAllProductFromDB();
+      List<List<string>> list = new List<List<string>>();
+      foreach (Product p in providers) {
+        List<string> l = new List<string>();
+        object[] obj = p.Properites();
+        for (int i = 0; i < obj.Length; i++) {
+          l.Add(obj[i].ToString());
+        }
+        list.Add(l);
+      }
+      return list;
+    }
+
+    #endregion
+
     private List<string> TypeFields(Type type) {
       var foo = Activator.CreateInstance(type);
       List<string> list = new List<string>();
