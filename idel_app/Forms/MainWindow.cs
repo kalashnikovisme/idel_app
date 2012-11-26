@@ -397,7 +397,68 @@ namespace idel_app {
     }
     
     private void RequestViewProducts_Click(object sender, EventArgs e) {
-      throw new NotImplementedException();
+      viewProducts();
+    }
+
+    private void viewProducts() {
+      rightFunctionPanel.Controls.Clear();
+      rightFunctionPanel.RowCount = 2;      // badcode
+      rightFunctionPanel.ColumnCount = 3;   // badcode
+      rightFunctionPanel.ColumnStyles.Insert(0, new ColumnStyle(SizeType.Percent, 33F));
+      rightFunctionPanel.ColumnStyles.Insert(1, new ColumnStyle(SizeType.Percent, 33F));
+      rightFunctionPanel.ColumnStyles.Insert(2, new ColumnStyle(SizeType.Percent, 33F));
+      rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 90F));
+      rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
+
+      workDataGridView = initializeProviderDataGridView();
+      rightFunctionPanel.Controls.Add(workDataGridView, 0, 0);
+      rightFunctionPanel.SetColumnSpan(workDataGridView, 3);
+
+      List<List<string>> list = Program.mainMiddleClass.AllProviders();
+      foreach (List<string> l in list) {
+        workDataGridView.Rows.Add(l.ToArray<string>());
+      }
+
+      AppButton addProductButton = createAppButton("Добавить продукт");
+      addProductButton.Click += new EventHandler(addProductButton_Click);
+      rightFunctionPanel.Controls.Add(addProductButton, 0, 1);
+
+      AppButton deleteProductButton = createAppButton("Удалить продукт");
+      deleteProductButton.Click += new EventHandler(deleteProviderButton_Click);
+      rightFunctionPanel.Controls.Add(deleteProductButton, 1, 1);
+    }
+
+    private void addProductButton_Click(object sender, EventArgs e) {
+      addDataForm = new AddDataForm(Program.mainMiddleClass.ProductFields().ToArray<string>());
+      addDataForm.SetIntTypeField("id");
+      addDataForm.FormClosing += new FormClosingEventHandler(addProductForm_FormClosing);
+      this.Enabled = false;
+    }
+
+    private void addProductForm_FormClosing(object sender, FormClosingEventArgs e) {
+      Program.mainMiddleClass.AddNewRequest(addDataForm.Datas);
+      viewProducts();
+      this.Enabled = true;
+    }
+
+    private AppDataGridView initializeProductDataGridView() {
+      AppDataGridView productDataGridView = new AppDataGridView() {
+        Indent = AppDataGridView.ControlIndent.Middle,
+        Font = new Font("Times New Roman", 11F),
+        AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells,
+        RowHeadersVisible = false,
+        ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+      };
+      List<string> columnNames = Program.mainMiddleClass.ProductFields();
+      List<DataGridViewTextBoxColumn> columns = new List<DataGridViewTextBoxColumn>();
+      foreach (string c in columnNames) {
+        columns.Add(new DataGridViewTextBoxColumn() { HeaderText = c, AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+      }
+      productDataGridView.Columns.AddRange(columns.ToArray<DataGridViewColumn>());
+
+      productDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
+      productDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+      return productDataGridView;
     }
   }
 }

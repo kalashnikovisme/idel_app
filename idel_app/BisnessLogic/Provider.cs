@@ -16,7 +16,7 @@ namespace idel_app.BisnessLogic {
       }
     }
 
-    private BusinessProperity title = new BusinessProperity("", "Имя");
+    private BusinessProperity title = new BusinessProperity("", "Наименование");
     public string Title {
       get {
         return title.Properity.ToString();
