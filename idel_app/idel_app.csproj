@@ -116,6 +116,7 @@
     <Compile Include="Controls\PictureLinkLabelBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DB\CommandTo1C.cs" />
     <Compile Include="DB\Product_DB.cs" />
     <Compile Include="DB\Provider_DB.cs" />
     <Compile Include="DB\Request_DB.cs" />
@@ -223,6 +224,15 @@
     <None Include="Resources\поставщик товара.png" />
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="V82">
+      <Guid>{2EC2A380-9200-4067-AE35-A6586D1B2888}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
