@@ -2,10 +2,8 @@
 using System.Text;
 using System.Reflection;
 
-namespace idel_app.DB
-{
-    class CommandTo1C
-    {
+namespace idel_app.DB {
+    class CommandTo1C {
         /// <summary>
         /// Перечисления. Определяют выбор для извлекаемых действий.
         /// </summary>
@@ -21,8 +19,7 @@ namespace idel_app.DB
         /// <param name="NameObject">Наименование нового объекта</param>
         /// <param name="Arguments">Аргументы, необходимые для создания нового объекта</param>
         /// <returns>возвращает созданный объект</returns>
-        public static object ExecuteCreateObject(object Object1C, string NameObject, object[] Arguments)
-        {
+        public static object ExecuteCreateObject(object Object1C, string NameObject, object[] Arguments) {
             return Object1C.GetType().InvokeMember(NameObject, CREATE_OBJECT, null, Object1C, Arguments);
         }
 
@@ -33,8 +30,7 @@ namespace idel_app.DB
         /// <param name="NameObject">Наименование процедуры или функции</param>
         /// <param name="Arguments">Аргументы, необходимые для выполнения функции</param>
         /// <returns>Возвращает объект. сформированный в результате выполнения функции</returns>
-        public static object ExecuteFunction(object Object1C, string NameObject, object[] Arguments)
-        {
+        public static object ExecuteFunction(object Object1C, string NameObject, object[] Arguments) {
             return Object1C.GetType().InvokeMember(NameObject, INVOKE_METHOD, null, Object1C, Arguments);
         }
 
@@ -44,8 +40,7 @@ namespace idel_app.DB
         /// <param name="Object1C">Объект 1С, для которого необходимо задать свойство</param>
         /// <param name="NameObject">Наименование свойства</param>
         /// <param name="Arguments">Аргументы, необходимые для установки свойства</param>
-        public static void SetProperty(object Object1C, string NameObject, object[] Arguments)
-        {
+        public static void SetProperty(object Object1C, string NameObject, object[] Arguments) {
             Object1C.GetType().InvokeMember(NameObject, SET_PROPERTY, null, Object1C, Arguments);
         }
 
@@ -55,8 +50,7 @@ namespace idel_app.DB
         /// <param name="Object1C">Объект 1С, у которого необходимо получить свойство</param>
         /// <param name="NameObject">Наименование свойства</param>
         /// <returns>Возвращает полученное значение</returns>
-        public static object GetProperty(object Object1C, string NameObject)
-        {
+        public static object GetProperty(object Object1C, string NameObject) {
             return Object1C.GetType().InvokeMember(NameObject, GET_PROPERTY, null, Object1C, null);
         }
         /// <summary>
@@ -65,8 +59,7 @@ namespace idel_app.DB
         /// <param name="only_availability">True - получить прайс только по товарам, которые
         /// имеются на складе, False - получение прайса по всей номенклатуре</param>
         /// <returns></returns>
-        public static string CreateRequest(bool only_availability) 
-        {
+        public static string CreateRequest(bool only_availability) {
             string keyword = "";
             if (only_availability)
                 keyword = "ЛЕВОЕ";
