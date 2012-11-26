@@ -22,23 +22,7 @@ namespace idel_app.DB {
 
         bool connect = Connect1C(GetConnectionString(), ref v82Base, ref connector);
 
-        List<List<string>> requests = new List<List<string>>();
-
-        List<string> oneRequest = new List<string>();
-        string id = "0";
-        string title = "Заголовок заявки";
-        string createDate = "12.12.2012 7:23:00";
-        string passDate = "12.12.2012 07:23:00";//собственный парсер даты скорее всего нужен будет
-        string employee = FillcBoxStorage(v82Base, connector)[0];
-        string product = "товар";
-        string provider = "поставщик";
-        string count = "1";
-        string wareHouseStatus = "true";//будет по русски
-        string requestStatus = "false";//будеть по руски Ложь
-        string comment = "комментарий";
-        oneRequest.AddRange(new List<string> {id, title, createDate, passDate, employee, product, provider, count, wareHouseStatus,
-                            requestStatus, comment});
-        requests.Add(oneRequest);
+        List<List<string>> requests = FillListList(v82Base, connector);
 
       return requests;
     }
@@ -68,17 +52,53 @@ namespace idel_app.DB {
         return ConnectionString.ToString();
     }
 
-    static private List<string> FillcBoxStorage(object v82Base, COMConnectorClass connector)
+    //получает из базы значения и формирует лист листов
+    static private List<List<string>> FillListList(object v82Base, COMConnectorClass connector)
     {
-        List<string> list = new List<string>();
+        List<List<string>> list = new List<List<string>>(); 
+         List<string> id = new List<string>();
+         List<string> title = new List<string>();
+         List<string> createDate = new List<string>();
+         List<string> passDate = new List<string>();
+         List<string> employee = new List<string>();
+         List<string> product = new List<string>();
+         List<string> provider = new List<string>();
+         List<string> count = new List<string>();
+         List<string> wareHouseStatus = new List<string>(); 
+         List<string> requestStatus = new List<string>();
+         List<string> comment = new List<string>();
         object storage = CommandTo1C.ExecuteCreateObject(v82Base, "NewObject", new object[] { "Запрос" });
-        CommandTo1C.SetProperty(storage, "Текст", new object[] { CommandTo1C.RequestStorage });
-        object result = CommandTo1C.ExecuteFunction(storage, "Выполнить", null);
+        CommandTo1C.SetProperty(storage, "Текст", new object[] { CommandTo1C.RequestIdel });
+        object result = CommandTo1C.ExecuteFunction(storage, "Выполнить", new object[]{});
         object selection = CommandTo1C.ExecuteFunction(result, "Выбрать", null);
         while ((bool)CommandTo1C.ExecuteFunction(selection, "Следующий", null))
         {
-            list.Add((string)CommandTo1C.GetProperty(selection, "Наименование"));
+            id.Add((string)CommandTo1C.GetProperty(selection, "Артикул"));
+            title.Add("Заголовок заявки");
+            createDate.Add("12.12.2012 7:23:00");
+            passDate.Add("12.12.2012 7:23:00");//собственный парсер даты скорее всего нужен будет
+            employee.Add("сотрудник");
+            product.Add("товар");
+            provider.Add((string)CommandTo1C.GetProperty(selection, "ОсновнойПоставщик"));
+            count.Add("3");//(string)CommandTo1C.GetProperty(selection, "Количество"));
+            wareHouseStatus.Add("true");//будет по русски
+            requestStatus.Add("false");//будеть по руски Ложь
+            comment.Add((string)CommandTo1C.GetProperty(selection, "Комментарий"));
         }
+
+        try
+        {
+            for (int i = 0; i < id.Count; i++)
+            {
+                list.Add(new List<string> {id[i], title[i], createDate[i], passDate[i], employee[i], product[i], provider[i], count[i], wareHouseStatus[i],
+                            requestStatus[i], comment[i]});
+            }
+        }
+        catch(Exception ex)
+        {
+            string error = ex.Message;
+        }
+
         return list;
     }
 
