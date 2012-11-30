@@ -22,7 +22,7 @@ namespace idel_app {
 
 		private AddDataForm addDataForm;
 		private DeleteRequestForm deleteRequestForm;
-		private DeleteProviderForm deleteProviderForm;
+		private DeleteClientForm deleteClientForm;
 		private AppDataGridView workDataGridView;
 
 		public event EventHandler DeleteAllRequest;
@@ -131,10 +131,10 @@ namespace idel_app {
 
 			functionsGroup[ConstFunctions.REQUEST_INDEX].Controls.Add(createRequestButton);
 
-			requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].Click += new EventHandler(RequestView_Click);
+			requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].Click += new EventHandler(ClientView_Click);
 			/* PublicClick */
-			requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].linkLabel.Click += new EventHandler(RequestView_Click);
-			requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].pictureBox.Click += new EventHandler(RequestView_Click);
+			requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].linkLabel.Click += new EventHandler(ClientView_Click);
+			requestFunctionGroupLinkLabels[textLinkLabels.LastIndexOf(ConstFunctions.REQUEST_VIEW_TITLE)].pictureBox.Click += new EventHandler(ClientView_Click);
 			/* End PublicClick */
 			createRequestButton.Click += new EventHandler(createRequestButton_Click);
 		}
@@ -143,14 +143,14 @@ namespace idel_app {
 
 		#region RequestFunctions
 
-		private void RequestView_Click(object sender, EventArgs e) {
-			viewRequests();
+		private void ClientView_Click(object sender, EventArgs e) {
+			viewClients();
 		}
 
 		/// <summary>
 		/// Показывает поля работы с заявками
 		/// </summary>
-		private void viewRequests() {
+		private void viewRequests(string client) {
 			rightFunctionPanel.Controls.Clear();
 			rightFunctionPanel.RowCount = 2;      // badcode
 			rightFunctionPanel.ColumnCount = 3;   // badcode
@@ -161,7 +161,7 @@ namespace idel_app {
 			rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
 
 			workDataGridView = initializeRequestDataGridView();
-			List<List<string>> list = Program.mainMiddleClass.AllRequests();
+			List<List<string>> list = Program.mainMiddleClass.AllRequestsOfClient(client);
 			for (int i = 0; i < list.Count; i++) {
 				workDataGridView.Rows.Add(list[i].ToArray<string>());
 				if (list[i][list[i].Count - 1] == "True") {
@@ -208,7 +208,7 @@ namespace idel_app {
 
 		private void deleteRequestForm_FormClosing(object sender, FormClosingEventArgs e) {
 			this.Enabled = true;
-			viewRequests();
+			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
 		}
 
 		private void addRequestButton_Click(object sender, EventArgs e) {
@@ -226,8 +226,8 @@ namespace idel_app {
 		}
 
 		private void add_FormClosing(object sender, FormClosingEventArgs e) {
-			Program.mainMiddleClass.AddNewRequest(addDataForm.Datas);
-			viewRequests();
+			Program.mainMiddleClass.AddNewRequest(addDataForm.Datas, Program.mainMiddleClass.CurrentClient.Name);
+			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
 			this.Enabled = true;
 		}
 
@@ -267,7 +267,7 @@ namespace idel_app {
 		}
 
 		private void requestDataGridView_DoubleClick(object sender, EventArgs e) {
-			//RequestCreator reqCreate = new RequestCreator(Program.mainMiddleClass.AllRequests()[workDataGridView.SelectedRows[0].Index]);
+			//RequestCreator reqCreate = new RequestCreator(Program.mainMiddleClass.AllRequestsOfClient()[workDataGridView.SelectedRows[0].Index]);
 		}
 
 		private void requestDataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
@@ -277,7 +277,7 @@ namespace idel_app {
 
 		private void MainWindow_DeleteAllRequest(object sender, EventArgs e) {
 			Program.mainMiddleClass.DeleteAll();
-			viewRequests();
+			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
 		}
 
 		private void MainWindow_DeletePassedRequest(object sender, EventArgs e) {
@@ -288,7 +288,7 @@ namespace idel_app {
 			foreach (DataGridViewRow d in workDataGridView.SelectedRows) {
 				Program.mainMiddleClass.DeleteRequestByIndex(d.Index);
 			}
-			viewRequests();
+			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
 		}
 
 		private void createRequestButton_Click(object sender, EventArgs e) {
@@ -326,6 +326,100 @@ namespace idel_app {
 		/// <returns>true, если указанная ячейка содержит null-значение</returns>
 		private bool checkColumnValueNULL(ref List<string> l, int i, int j) {
 			return ((j == 3) && (workDataGridView.Rows[i].Cells[j].Value == null));
+		}
+
+		#endregion
+
+		#region Сlients
+
+		private void viewClients() {
+			rightFunctionPanel.Controls.Clear();
+			rightFunctionPanel.RowCount = 2;      // badcode
+			rightFunctionPanel.ColumnCount = 3;   // badcode
+			rightFunctionPanel.ColumnStyles.Insert(0, new ColumnStyle(SizeType.Percent, 33F));
+			rightFunctionPanel.ColumnStyles.Insert(1, new ColumnStyle(SizeType.Percent, 33F));
+			rightFunctionPanel.ColumnStyles.Insert(2, new ColumnStyle(SizeType.Percent, 33F));
+			rightFunctionPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 90F));
+			rightFunctionPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, ConstForms.ROW_HEIGHT));
+
+			workDataGridView = initializeClientDataGridView();
+			List<List<string>> list = Program.mainMiddleClass.AllClients();
+			for (int i = 0; i < list.Count; i++) {
+				workDataGridView.Rows.Add(list[i].ToArray<string>());
+				if (list[i][list[i].Count - 1] == "True") {
+					workDataGridView.Rows[i].Cells[workDataGridView.Rows.Count - 1].Value = true;
+				}
+			}
+			rightFunctionPanel.Controls.Add(workDataGridView, 0, 0);
+			rightFunctionPanel.SetColumnSpan(workDataGridView, 3);
+
+			AppButton addClientButton = createAppButton("Добавить клиента");
+			addClientButton.Click += new EventHandler(addClientButton_Click);
+			rightFunctionPanel.Controls.Add(addClientButton, 0, 1);
+
+			AppButton deleteClientButton = createAppButton("Удалить клиента");
+			deleteClientButton.Click += new EventHandler(deleteClientButton_Click);
+			rightFunctionPanel.Controls.Add(deleteClientButton, 1, 1);
+		}
+
+		private void deleteClientButton_Click(object sender, EventArgs e) {
+			List<int> indexes = new List<int>();
+			foreach (DataGridViewRow row in workDataGridView.SelectedRows) {
+				indexes.Add(row.Index);
+			}
+			deleteClientForm = new DeleteClientForm(indexes);
+			deleteClientForm.FormClosing += new FormClosingEventHandler(deleteClientForm_FormClosing);
+			this.Enabled = false;
+		}
+
+		private void deleteClientForm_FormClosing(object sender, FormClosingEventArgs e) {
+			this.Enabled = true;
+			viewClients();
+		}
+
+		private void addClientButton_Click(object sender, EventArgs e) {
+			AddNewClient();
+		}
+
+		private void AddNewClient() {
+			addDataForm = new AddDataForm(Program.mainMiddleClass.ClientFields().ToArray<string>());
+			addDataForm.FormClosing += new FormClosingEventHandler(addClientForm_FormClosing);
+			this.Enabled = false;
+		}
+
+		private void addClientForm_FormClosing(object sender, FormClosingEventArgs e) {
+			Program.mainMiddleClass.AddNewRequest(addDataForm.Datas, Program.mainMiddleClass.CurrentClient.Name);
+			viewClients();
+			this.Enabled = true;
+		}
+		
+		private AppDataGridView initializeClientDataGridView() {
+			AppDataGridView clientDataGridView = new AppDataGridView() {
+				Indent = AppDataGridView.ControlIndent.Middle,
+				Font = new Font("Times New Roman", 11F),
+				AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells,
+				RowHeadersVisible = false,
+				ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+			};
+			List<string> columnNames = Program.mainMiddleClass.ClientFields();
+			List<DataGridViewTextBoxColumn> columns = new List<DataGridViewTextBoxColumn>();
+			foreach (string c in columnNames) {
+				columns.Add(new DataGridViewTextBoxColumn() { HeaderText = c, AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+			}
+			clientDataGridView.Columns.AddRange(columns.ToArray<DataGridViewColumn>());
+			clientDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
+			clientDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			clientDataGridView.Columns[0].Width = 40;
+			clientDataGridView.CellValueChanged += new DataGridViewCellEventHandler(requestDataGridView_CellValueChanged);
+			for (int i = 0; i < clientDataGridView.Rows.Count; i++) {
+				clientDataGridView.DoubleClick += new EventHandler(clientDataGridView_DoubleClick);
+			}
+			return clientDataGridView;
+		}
+
+		private void clientDataGridView_DoubleClick(object sender, EventArgs e) {
+			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
+			Program.mainMiddleClass.CurrentClient = new BisnessLogic.Client(workDataGridView.SelectedRows[0].Cells[0].Value.ToString());
 		}
 
 		#endregion

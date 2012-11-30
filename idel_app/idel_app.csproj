@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="BisnessLogic\BLogicConst.cs" />
     <Compile Include="BisnessLogic\BusinessProperity.cs" />
+    <Compile Include="BisnessLogic\Client.cs" />
     <Compile Include="BisnessLogic\DescriptionRequest.cs" />
     <Compile Include="BisnessLogic\Product.cs" />
     <Compile Include="BisnessLogic\Provider.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Controls\PictureLinkLabelBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DB\Client_DB.cs" />
     <Compile Include="DB\CommandTo1C.cs" />
     <Compile Include="DB\Product_DB.cs" />
     <Compile Include="DB\Provider_DB.cs" />
@@ -125,7 +127,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ConstForms.cs" />
-    <Compile Include="Forms\DeleteProviderForm.cs">
+    <Compile Include="Forms\DeleteClientForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\DeleteRequestForm.cs">
@@ -161,8 +163,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BisnessLogic\Request.cs" />
-    <EmbeddedResource Include="Forms\DeleteProviderForm.resx">
-      <DependentUpon>DeleteProviderForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\DeleteClientForm.resx">
+      <DependentUpon>DeleteClientForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DeleteRequestForm.resx">
       <DependentUpon>DeleteRequestForm.cs</DependentUpon>

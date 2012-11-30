@@ -13,7 +13,7 @@ namespace idel_app.DB {
         /// Если нет, буди звонком.
         /// </summary>ок
         /// <returns></returns>
-        static private List<List<string>> GetAllRequestToListList() {
+        static private List<List<string>> GetAllRequestToListList(string clientName) {
             /*
               // создание COM объекта для соединения с 1С
               //COMConnectorClass connector = new COMConnectorClass();//мб лучше сделать полем класса
@@ -22,9 +22,9 @@ namespace idel_app.DB {
 
               bool connect = Connect1C(GetConnectionString(), ref v82Base, ref connector);
 
-              List<List<string>> requests = FillListList(v82Base, connector);
+              List<List<string>> clients = FillListList(v82Base, connector);
             */
-            //return requests;
+            //return clients;
             return new List<List<string>>();
         }
 
@@ -120,8 +120,8 @@ namespace idel_app.DB {
             return false;
         }
 
-        static public List<Request> GetAllRequestFromDB() {
-            List<List<string>> workList = GetAllRequestToListList();
+        static public List<Request> GetAllRequestFromDBByClient(string clientName) {
+            List<List<string>> workList = GetAllRequestToListList(clientName);
             List<Request> list = new List<Request>();
             foreach (List<string> l in workList) {
                 list.Add(new Request(PInt(l[0]), l[1], PDT(l[2]), PDT(l[3]), l[4], Parse1CStringToBoolean(l[5]), l[6]));
