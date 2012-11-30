@@ -20,6 +20,7 @@ namespace idel_app.BisnessLogic {
 
 		private void addHeaderAndLines(List<string> fields, List<List<string>> datas) {
 			initializeHeader(fields);
+			table = new List<List<string>>();
 			foreach (List<string> l in datas) {
 				table.Add(l);
 			}

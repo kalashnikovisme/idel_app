@@ -24,6 +24,7 @@ namespace idel_app {
 		private DeleteRequestForm deleteRequestForm;
 		private DeleteClientForm deleteClientForm;
 		private AppDataGridView workDataGridView;
+		private DataGridViewSelectedRowCollection selectedRows;
 
 		public event EventHandler DeleteAllRequest;
 		public event EventHandler DeleteCheckedRequest;
@@ -267,7 +268,14 @@ namespace idel_app {
 		}
 
 		private void requestDataGridView_DoubleClick(object sender, EventArgs e) {
-			//RequestCreator reqCreate = new RequestCreator(Program.mainMiddleClass.AllRequestsOfClient()[workDataGridView.SelectedRows[0].Index]);
+			RequestCreator reqCreate = new RequestCreator(Program.mainMiddleClass.GetDescriptionByIndexOfRequest(workDataGridView.SelectedRows[0].Index));
+			reqCreate.FormClosing += new FormClosingEventHandler(reqCreate_FormClosing);
+			this.Enabled = false;
+		}
+
+		private void reqCreate_FormClosing(object sender, FormClosingEventArgs e) {
+			this.Enabled = true;
+			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
 		}
 
 		private void requestDataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
@@ -413,13 +421,18 @@ namespace idel_app {
 			clientDataGridView.CellValueChanged += new DataGridViewCellEventHandler(requestDataGridView_CellValueChanged);
 			for (int i = 0; i < clientDataGridView.Rows.Count; i++) {
 				clientDataGridView.DoubleClick += new EventHandler(clientDataGridView_DoubleClick);
+				clientDataGridView.SelectionChanged += new EventHandler(clientDataGridView_SelectionChanged);
 			}
 			return clientDataGridView;
 		}
 
+		private void clientDataGridView_SelectionChanged(object sender, EventArgs e) {
+			selectedRows = workDataGridView.SelectedRows;
+		}
+
 		private void clientDataGridView_DoubleClick(object sender, EventArgs e) {
 			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
-			Program.mainMiddleClass.CurrentClient = new BisnessLogic.Client(workDataGridView.SelectedRows[0].Cells[0].Value.ToString());
+			Program.mainMiddleClass.CurrentClient = new BisnessLogic.Client(selectedRows[0].Cells[0].Value.ToString());
 		}
 
 		#endregion

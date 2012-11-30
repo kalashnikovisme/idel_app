@@ -126,6 +126,7 @@ namespace idel_app.DB {
             foreach (List<string> l in workList) {
                 list.Add(new Request(PInt(l[0]), l[1], PDT(l[2]), PDT(l[3]), l[4], Parse1CStringToBoolean(l[5]), l[6]));
             }
+			list.Add(new Request());
             return list;
         }
     }

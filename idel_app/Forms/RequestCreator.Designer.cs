@@ -32,6 +32,7 @@
 			this.WarePassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DatePassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.button1 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -100,11 +101,22 @@
 			this.Comment.HeaderText = "Комментарий";
 			this.Comment.Name = "Comment";
 			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(641, 386);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(127, 45);
+			this.button1.TabIndex = 1;
+			this.button1.Text = "Сохранить";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
 			// RequestCreator
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(780, 461);
+			this.ClientSize = new System.Drawing.Size(780, 440);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.dataGridView1);
 			this.Name = "RequestCreator";
 			this.Text = "RequestCreator";
@@ -124,5 +136,6 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn WarePassed;
 		private System.Windows.Forms.DataGridViewTextBoxColumn DatePassed;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
+		private System.Windows.Forms.Button button1;
 	}
 }

@@ -20,7 +20,9 @@ namespace idel_app.Middle {
 			set {
 				curClient = value;
 			}
-		} 
+		}
+
+		private Request curRequest = new Request();
 
 		#region RequestMethods
 		/// <summary>
@@ -39,6 +41,10 @@ namespace idel_app.Middle {
 				list.Add(l);
 			}
 			return list;
+		}
+
+		public List<List<string>> GetDescriptionByIndexOfRequest(int index) {
+			return Request_DB.GetAllRequestFromDBByClient(Program.mainMiddleClass.CurrentClient.Name)[index].Description.Data;
 		}
 
 		/// <summary>
@@ -76,6 +82,10 @@ namespace idel_app.Middle {
 
 		public void MarkRequestUnPassed(int index) {
 
+		}
+
+		public void SaveDescriptionCurrentRequest(List<List<string>> list) {
+			
 		}
 
 		#endregion
