@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="BisnessLogic\BLogicConst.cs" />
     <Compile Include="BisnessLogic\BusinessProperity.cs" />
+    <Compile Include="BisnessLogic\DescriptionRequest.cs" />
     <Compile Include="BisnessLogic\Product.cs" />
     <Compile Include="BisnessLogic\Provider.cs" />
     <Compile Include="Controls\AppDataGridView.cs">
@@ -148,6 +149,12 @@
     <Compile Include="Forms\MiniManagerAppWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\RequestCreator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RequestCreator.Designer.cs">
+      <DependentUpon>RequestCreator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Functions\ConstFunctions.cs" />
     <Compile Include="Middle\Const.cs" />
     <Compile Include="Middle\MiddleClass.cs" />
@@ -168,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MiniManagerAppWindow.resx">
       <DependentUpon>MiniManagerAppWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RequestCreator.resx">
+      <DependentUpon>RequestCreator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -21,7 +21,7 @@ namespace idel_app.Middle {
             List<List<string>> list = new List<List<string>>();
             foreach (Request r in requests) {
                 List<string> l = new List<string>();
-                object[] obj = r.Properites();
+                object[] obj = r.ProperitesWithOutDescription();
                 for (int i = 0; i < obj.Length; i++) {
                     l.Add(obj[i].ToString());
                 }
@@ -35,7 +35,7 @@ namespace idel_app.Middle {
         /// </summary>
         public List<string> RequestFields() {
             Request r = new Request();
-            return r.ProperitesNames();
+            return r.ProperitesNamesWithOutDescription();
         }
 
         public void AddNewRequest(List<string> newAdd) {
@@ -65,55 +65,6 @@ namespace idel_app.Middle {
 
         public void MarkRequestUnPassed(int index) {
 
-        }
-
-        #endregion
-
-        #region Provider Methods
-
-        public List<string> ProviderFields() {
-            Provider p = new Provider();
-            return p.ProperitesNames();
-        }
-
-        public List<List<string>> AllProviders() {
-            List<Provider> providers = Provider_DB.GetAllProviderFromDB();
-            List<List<string>> list = new List<List<string>>();
-            foreach (Provider p in providers) {
-                List<string> l = new List<string>();
-                object[] obj = p.Properites();
-                for (int i = 0; i < obj.Length; i++) {
-                    l.Add(obj[i].ToString());
-                }
-                list.Add(l);
-            }
-            return list;
-        }
-
-        public void AddNewProvider(List<string> newAdd) { }
-
-
-        #endregion
-
-        #region Product Methods
-
-        public List<string> ProductFields() {
-            Product p = new Product();
-            return p.ProperitesNames();
-        }
-
-        public List<List<string>> AllProducts() {
-            List<Product> providers = Product_DB.GetAllProductFromDB();
-            List<List<string>> list = new List<List<string>>();
-            foreach (Product p in providers) {
-                List<string> l = new List<string>();
-                object[] obj = p.Properites();
-                for (int i = 0; i < obj.Length; i++) {
-                    l.Add(obj[i].ToString());
-                }
-                list.Add(l);
-            }
-            return list;
         }
 
         #endregion

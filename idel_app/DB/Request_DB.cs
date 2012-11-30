@@ -66,7 +66,7 @@ namespace idel_app.DB {
         //     List<string> count = new List<string>();
         //     List<string> wareHouseStatus = new List<string>(); 
         //     List<string> requestStatus = new List<string>();
-        //     List<string> comment = new List<string>();
+        //     List<string> description = new List<string>();
         //    object storage = CommandTo1C.ExecuteCreateObject(v82Base, "NewObject", new object[] { "Запрос" });
         //    CommandTo1C.SetProperty(storage, "Текст", new object[] { CommandTo1C.RequestIdel });
         //    object result = CommandTo1C.ExecuteFunction(storage, "Выполнить", new object[]{});
@@ -83,7 +83,7 @@ namespace idel_app.DB {
         //        count.Add("3");//(string)CommandTo1C.GetProperty(selection, "Количество"));
         //        wareHouseStatus.Add("true");//будет по русски
         //        requestStatus.Add("false");//будеть по руски Ложь
-        //        comment.Add((string)CommandTo1C.GetProperty(selection, "Комментарий"));
+        //        description.Add((string)CommandTo1C.GetProperty(selection, "Комментарий"));
         //    }
 
         //    try
@@ -91,7 +91,7 @@ namespace idel_app.DB {
         //        for (int i = 0; i < id.Count; i++)
         //        {
         //            list.Add(new List<string> {id[i], title[i], createDate[i], passDate[i], employee[i], product[i], provider[i], count[i], wareHouseStatus[i],
-        //                        requestStatus[i], comment[i]});
+        //                        requestStatus[i], description[i]});
         //        }
         //    }
         //    catch(Exception ex)
@@ -110,7 +110,7 @@ namespace idel_app.DB {
             return DateTime.Parse(s);
         }
 
-        static private bool Parse1CString(string s) {
+        static private bool Parse1CStringToBoolean(string s) {
             if (s == "Истина") {
                 return true;
             }
@@ -124,7 +124,7 @@ namespace idel_app.DB {
             List<List<string>> workList = GetAllRequestToListList();
             List<Request> list = new List<Request>();
             foreach (List<string> l in workList) {
-                list.Add(new Request(PInt(l[0]), l[1], PDT(l[2]), PDT(l[3]), l[4], l[5], l[6], PInt(l[7]), Parse1CString(l[8]), Parse1CString(l[9]), l[10]));
+                list.Add(new Request(PInt(l[0]), l[1], PDT(l[2]), PDT(l[3]), l[4], Parse1CStringToBoolean(l[5]), l[6]));
             }
             return list;
         }
