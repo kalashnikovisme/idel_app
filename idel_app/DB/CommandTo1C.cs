@@ -1,34 +1,28 @@
 ﻿using System;
 using System.Text;
 using System.Reflection;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using V82;
 
 namespace idel_app.DB
 {
-    class RequestTo1C
+    class CommandTo1C
     {
-        // Метод для подключения к 1С
+        /// <summary>
+        /// Метод для подключения к 1С.
+        /// </summary>
+        /// <param name="filename">путь к базе</param>
+        /// <param name="user">логин</param>
+        /// <param name="password">пароль</param>
+        /// <param name="v82Base">объект подключения к базе</param>
+        /// <param name="connector">COM объект для соединения с 1С</param>
+        /// <returns></returns>
         static public bool Connect1C(string filename, string user, string password, ref object v82Base, ref COMConnectorClass connector)
         {
             try
             {
                 v82Base = connector.Connect(GetConnectionString(filename, user, password));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                string error = ("Ошибка подключения!\n" + ex.Message);
-                return false;
-            }
-        }
-
-        // Метод для подключения к 1С
-        static public bool Connect1C(ref object v82Base, ref COMConnectorClass connector)
-        {
-            try
-            {
-                v82Base = connector.Connect(GetConnectionString(@"d:\programming\1c\идель\", "", ""));
                 return true;
             }
             catch (Exception ex)
@@ -48,126 +42,230 @@ namespace idel_app.DB
             return ConnectionString.ToString();
         }
 
-        //получает из базы значения и формирует лист листов заявок
-        static public List<List<string>> FillListListRequests(object v82Base, COMConnectorClass connector)
+        /// <summary>
+        /// Получает из базы 1С список записей по запросу.
+        /// </summary>
+        /// <param name="v82Base">Объект подключения к базе 1С</param>
+        /// <param name="connector">COM объект для соединения с 1С</param>
+        /// <param name="requestText">Текст запроса</param>
+        /// <param name="fieldsSelection">Названия полей в полученной выборке (в запросе после слова КАК идут)</param>
+        /// <param name="parametrs">Ассоциативный массив Название параметра - Значение</param>
+        /// <returns>Возвращает список списков строк, в котором каждый внутренний список - запись</returns>
+        static public List<List<string>> requestToListLists(object v82Base, COMConnectorClass connector, string requestText, List<string> fieldsSelection,
+                                                            Dictionary<string, object> parametrs = null)
         {
+            object storage = RequestTo1C.ExecuteCreateObject(v82Base, "NewObject", new object[] { "Запрос" });
+            RequestTo1C.SetProperty(storage, "Текст", new object[] { requestText });
+            if (parametrs != null)
+            {
+                foreach (KeyValuePair<string, object> kvp in parametrs)
+                    RequestTo1C.ExecuteFunction(storage, "УстановитьПараметр", new object[] { kvp.Key, kvp.Value });
+            }
+            object result = RequestTo1C.ExecuteFunction(storage, "Выполнить", null);
+            object selection = RequestTo1C.ExecuteFunction(result, "Выбрать", null);
+            int count;
+            int.TryParse(RequestTo1C.ExecuteFunction(selection, "Количество", null).ToString(), out count);
             List<List<string>> list = new List<List<string>>();
-            List<string> id = new List<string>();
-            List<string> title = new List<string>();
-            List<string> createDate = new List<string>();
-            List<string> passDate = new List<string>();
-            List<string> employee = new List<string>();
-            List<string> product = new List<string>();
-            List<string> provider = new List<string>();
-            List<string> count = new List<string>();
-            List<string> wareHouseStatus = new List<string>();
-            List<string> requestStatus = new List<string>();
-            List<string> comment = new List<string>();
-            object storage = CommandTo1C.ExecuteCreateObject(v82Base, "NewObject", new object[] { "Запрос" });
-            CommandTo1C.SetProperty(storage, "Текст", new object[] { CommandTo1C.RequestIdel });
-            object result = CommandTo1C.ExecuteFunction(storage, "Выполнить", new object[] { });
-            object selection = CommandTo1C.ExecuteFunction(result, "Выбрать", null);
-            while ((bool)CommandTo1C.ExecuteFunction(selection, "Следующий", null))
+            //string [][] list = new string[count][];
+            for (int i = 0; i < count; i++)
             {
-                id.Add((string)CommandTo1C.GetProperty(selection, "Артикул"));
-                title.Add("Заголовок заявки");
-                createDate.Add("12.12.2012 7:23:00");
-                passDate.Add("12.12.2012 7:23:00");//собственный парсер даты скорее всего нужен будет
-                employee.Add("сотрудник");
-                product.Add((string)CommandTo1C.GetProperty(selection, "НаименованиеТовара"));
-                provider.Add((string)CommandTo1C.GetProperty(selection, "ОсновнойПоставщик"));
-                count.Add("3");//(string)CommandTo1C.GetProperty(selection, "Количество"));
-                wareHouseStatus.Add("Истина");//будет по русски
-                requestStatus.Add("Ложь");//будеть по руски Ложь
-                comment.Add((string)CommandTo1C.GetProperty(selection, "Комментарий"));
+                //list[i] = new string[fieldsSelection.Count];
+                list.Add(new List<string>());
             }
-
-            try
+            for (int k = 0; (bool)RequestTo1C.ExecuteFunction(selection, "Следующий", null); k++)
             {
-                for (int i = 0; i < id.Count; i++)
+                for (int i = 0; i < fieldsSelection.Count; i++)
                 {
-                    list.Add(new List<string> {id[i], title[i], createDate[i], passDate[i], employee[i], product[i], provider[i], count[i], wareHouseStatus[i],
-                            requestStatus[i], comment[i]});
+                    object record = RequestTo1C.GetProperty(selection, fieldsSelection[i]);
+                    //list[k][i] = (((DBNull.Value.Equals(record) || record == null) ? "NULL" : record).ToString());
+                    list[k].Add(((DBNull.Value.Equals(record) || record == null) ? "NULL" : record).ToString());//проверка, что в ячейке значение не DBNull или null
                 }
-            }
-            catch (Exception ex)
-            {
-                string error = ex.Message;
             }
             return list;
         }
 
-        //получает из базы значения и формирует лист листов поставщиков
-        static public List<List<string>> FillListListProvider(object v82Base, COMConnectorClass connector)
+        /// <summary>
+        /// Функция добавления записи в регистр базы 1С.
+        /// </summary>
+        /// <param name="v82Base">объект подключения к базе</param>
+        /// <param name="connector">COM объект для соединения с 1С</param>
+        /// <param name="registrType">Тип регистра (РегистрНакопления, РегистрСведений и т.п.)</param>
+        /// <param name="registrName">Название регистра</param>
+        /// <param name="registratorName">Название регистратора</param>
+        /// <param name="dimension">Ассоциативный массив Название измерения - Значение</param>
+        /// <param name="resource">Ассоциативный массив Название ресурса - Значение</param>
+        static public void addToRegistr(object v82Base, COMConnectorClass connector, string registrType, string registrName, string registratorName,
+                        Dictionary<string, object> dimension, Dictionary<string, object> resource)
         {
-            List<List<string>> list = new List<List<string>>();
-            List<string> id = new List<string>();
-            List<string> title = new List<string>();
-            List<string> phone = new List<string>();
-            List<string> email = new List<string>();
-            object storage = CommandTo1C.ExecuteCreateObject(v82Base, "NewObject", new object[] { "Запрос" });
-            CommandTo1C.SetProperty(storage, "Текст", new object[] { CommandTo1C.RequestProvider });
-            object result = CommandTo1C.ExecuteFunction(storage, "Выполнить", new object[] { });
-            object selection = CommandTo1C.ExecuteFunction(result, "Выбрать", null);
-            while ((bool)CommandTo1C.ExecuteFunction(selection, "Следующий", null))
-            {
-                id.Add((string)CommandTo1C.GetProperty(selection, "Артикул"));
-                title.Add("Заголовок заявки");
-                phone.Add("+9637201212");//будеть по руски Ложь
-                email.Add("DarthVader@LordSith.com");
-            }
+            object registrs = RequestTo1C.GetProperty(v82Base, registrType);
+            object registr = RequestTo1C.GetProperty(registrs, registrName);
+            object storage = RequestTo1C.ExecuteFunction(registr, "СоздатьНаборЗаписей", null);
+            object registrator = RequestTo1C.GetProperty(RequestTo1C.GetProperty(storage, "Отбор"), "Регистратор");
+            object document = RequestTo1C.GetProperty(RequestTo1C.GetProperty(v82Base, "Документы"), registratorName);
+            object linkDocument = RequestTo1C.ExecuteFunction(document, "ПолучитьСсылку", null);
+            RequestTo1C.ExecuteFunction(registrator, "Установить", new object[] { linkDocument });
 
-            try
-            {
-                for (int i = 0; i < id.Count; i++)
-                {
-                    list.Add(new List<string> {id[i], title[i], phone[i], email[i]});
-                }
-            }
-            catch (Exception ex)
-            {
-                string error = ex.Message;
-            }
+            object str = RequestTo1C.ExecuteFunction(storage, "Добавить", null);
+            DateTime d = DateTime.Today;
+            RequestTo1C.SetProperty(str, "Период", new object[] { d });
 
-            return list;
+            foreach (KeyValuePair<string, object> kvp in dimension)
+                RequestTo1C.SetProperty(str, kvp.Key, new object[] { kvp.Value });
+
+            foreach (KeyValuePair<string, object> kvp in resource)
+                RequestTo1C.SetProperty(str, kvp.Key, new object[] { kvp.Value });
+
+            RequestTo1C.ExecuteFunction(storage, "Записать", null);
         }
 
-        //получает из базы значения и формирует лист листов товаров
-        static public List<List<string>> FillListListProduct(object v82Base, COMConnectorClass connector)
+        /// <summary>
+        /// Функция добавления записи в справочник базы 1С.
+        /// </summary>
+        /// <param name="v82Base">объект подключения к базе</param>
+        /// <param name="connector">COM объект для соединения с 1С</param>
+        /// <param name="thesaurusName">название справочника</param>
+        /// <param name="requisites">ассоциативный массив Название реквизита - Значение</param>
+        /// <returns>Возвращает код добавленной записи в формате ХХХХХХХХХ(если этот код храниться в базе как строка)</returns>
+        static public string addToThesaurus(object v82Base, COMConnectorClass connector, string thesaurusName, Dictionary<string, object> requisites)
         {
-            List<List<string>> list = new List<List<string>>();
-            List<string> id = new List<string>();
-            List<string> title = new List<string>();
-            List<string> description = new List<string>();
+            object thesauruses = RequestTo1C.GetProperty(v82Base, "Справочники");
+            object thesaurus = RequestTo1C.GetProperty(thesauruses, thesaurusName);
+            object record = RequestTo1C.ExecuteFunction(thesaurus, "СоздатьЭлемент", null);
 
-            object storage = CommandTo1C.ExecuteCreateObject(v82Base, "NewObject", new object[] { "Запрос" });
-            CommandTo1C.SetProperty(storage, "Текст", new object[] { CommandTo1C.RequestProduct });
-            object result = CommandTo1C.ExecuteFunction(storage, "Выполнить", new object[] { });
-            object selection = CommandTo1C.ExecuteFunction(result, "Выбрать", null);
-            while ((bool)CommandTo1C.ExecuteFunction(selection, "Следующий", null))
-            {
-                id.Add((string)CommandTo1C.GetProperty(selection, "Артикул"));
-                title.Add("Заголовок заявки");
-                description.Add("Это описание");
-            }
+            foreach (KeyValuePair<string, object> kvp in requisites)
+                RequestTo1C.SetProperty(record, kvp.Key, new object[] { kvp.Value });
 
+            RequestTo1C.ExecuteFunction(record, "Записать", null);
+            return RequestTo1C.GetProperty(record, "Код").ToString();
+        }
+
+        /// <summary>
+        /// Функция удаления записи из регистра базы 1С.(функция не доделана!)
+        /// </summary>
+        /// <param name="v82Base">объект подключения к базе</param>
+        /// <param name="connector">COM объект для соединения с 1С</param>
+        /// <param name="registrType">Тип регистра (РегистрНакопления, РегистрСведений и т.п.)</param>
+        /// <param name="registrName">Название регистра</param>
+        /// <param name="registratorName">Название регистратора</param>
+        /// <param name="index">Индекс удаляемой строки</param>
+        /// <returns>Возвращает, прошло ли удаление или нет</returns>
+        static public bool deleteFromRegistr(object v82Base, COMConnectorClass connector, string registrType, string registrName, string registratorName, int index)
+        {
             try
             {
-                for (int i = 0; i < id.Count; i++)
-                {
-                    list.Add(new List<string> { id[i], title[i], description[i] });
-                }
+                object registrs = RequestTo1C.GetProperty(v82Base, registrType);
+                object registr = RequestTo1C.GetProperty(registrs, registrName);
+                object storage = RequestTo1C.ExecuteFunction(registr, "СоздатьНаборЗаписей", null);
+                object registrator = RequestTo1C.GetProperty(RequestTo1C.GetProperty(storage, "Отбор"), "Регистратор");
+                object document = RequestTo1C.GetProperty(RequestTo1C.GetProperty(v82Base, "Документы"), registratorName);
+                object linkDocument = RequestTo1C.ExecuteFunction(document, "ПолучитьСсылку", null);
+                RequestTo1C.ExecuteFunction(registrator, "Установить", new object[] { linkDocument });
+
+                object str = RequestTo1C.ExecuteFunction(storage, "Удалить", new object[] { index });
+
+                RequestTo1C.ExecuteFunction(storage, "Записать", null);
+                return true;
             }
             catch (Exception ex)
             {
-                string error = ex.Message;
+                return false;
             }
+        }
 
-            return list;
+        /// <summary>
+        /// Функция удаления записи из справочника базы 1С.
+        /// </summary>
+        /// <param name="v82Base">объект подключения к базе</param>
+        /// <param name="connector">COM объект для соединения с 1С</param>
+        /// <param name="thesaurusName">Название справочника</param>
+        /// <param name="index">Индекс удаляемой строки( в формате ХХХХХХХХХ если код хранится как строка)</param>
+        /// <returns>Возвращает, прошло ли удаление или нет</returns>
+        static public bool deleteFromThesaurus(object v82Base, COMConnectorClass connector, string thesaurusName, string index)
+        {
+            try
+            {
+                object thesauruses = RequestTo1C.GetProperty(v82Base, "Справочники");
+                object thesaurus = RequestTo1C.GetProperty(thesauruses, thesaurusName);
+                object deletingRecord = RequestTo1C.ExecuteFunction(thesaurus, "НайтиПоКоду", new object[] { index });
+                object deletingObject = RequestTo1C.ExecuteFunction(deletingRecord, "ПолучитьОбъект", null);
+                RequestTo1C.ExecuteFunction(deletingObject, "Удалить", null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Функция удаления всех записей из справочника базы 1С.
+        /// </summary>
+        /// <param name="v82Base">объект подключения к базе</param>
+        /// <param name="connector">COM объект для соединения с 1С</param>
+        /// <param name="thesaurusName">Название справочника</param>
+        /// <returns>Возвращает, прошло ли удаление или нет</returns>
+        static public bool deleteAllFromThesaurus(object v82Base, COMConnectorClass connector, string thesaurusName)
+        {
+            try
+            {
+                object thesauruses = RequestTo1C.GetProperty(v82Base, "Справочники");
+                object thesaurus = RequestTo1C.GetProperty(thesauruses, thesaurusName);
+                object selection = RequestTo1C.ExecuteFunction(thesaurus, "Выбрать", null);
+                while ((bool)RequestTo1C.ExecuteFunction(selection, "Следующий", null))
+                {
+                    object deletingObject = RequestTo1C.ExecuteFunction(selection, "ПолучитьОбъект", null);
+                    RequestTo1C.ExecuteFunction(deletingObject, "Удалить", null);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Функция изменения записи в базе 1С.
+        /// </summary>
+        /// <param name="v82Base">объект подключения к базе</param>
+        /// <param name="connector">COM объект для соединения с 1С</param>
+        /// <param name="thesaurusName">Название справочника</param>
+        /// <param name="index">Индекс изменяемой записи в формате ХХХХХХХХХ</param>
+        /// <param name="updateValues">ассоциативный массив Название реквизита - Значение</param>
+        /// <returns>Возвращает удачно завершилось обновление или нет</returns>
+        static public bool updatingRecordFromThesaurus(object v82Base, COMConnectorClass connector, string thesaurusName, string index, Dictionary<string, object> updateValues)
+        {
+            try
+            {
+                object thesauruses = RequestTo1C.GetProperty(v82Base, "Справочники");
+                object thesaurus = RequestTo1C.GetProperty(thesauruses, thesaurusName);
+                object record = RequestTo1C.ExecuteFunction(thesaurus, "НайтиПоКоду", new object[] { index });
+                object updatingObject = RequestTo1C.ExecuteFunction(record, "ПолучитьОбъект", null);
+
+                foreach (KeyValuePair<string, object> kvp in updateValues)
+                    RequestTo1C.SetProperty(updatingObject, kvp.Key, new object[] { kvp.Value });
+
+                RequestTo1C.ExecuteFunction(updatingObject, "Записать", null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                string str = ex.Message;
+                return false;
+            }
+        }
+
+        static public object getObjectFromThesaurusByName(object v82Base, COMConnectorClass connector, string thesaurusName, string name)
+        {
+            object thesauruses = RequestTo1C.GetProperty(v82Base, "Справочники");
+            object thesaurus = RequestTo1C.GetProperty(thesauruses, thesaurusName);
+            object record = RequestTo1C.ExecuteFunction(thesaurus, "НайтиПоНаименованию", new object[] { name });
+            //return RequestTo1C.ExecuteFunction(record, "ПолучитьОбъект", null);
+            return record;
         }
     }
 
-    class CommandTo1C
+    class RequestTo1C
     {
         /// <summary>
         /// Перечисления. Определяют выбор для извлекаемых действий.
@@ -222,49 +320,7 @@ namespace idel_app.DB
         {
             return Object1C.GetType().InvokeMember(NameObject, GET_PROPERTY, null, Object1C, null);
         }
-        /// <summary>
-        /// Статический метод. Формирует текст запроса для получения прайса
-        /// </summary>
-        /// <param name="only_availability">True - получить прайс только по товарам, которые
-        /// имеются на складе, False - получение прайса по всей номенклатуре</param>
-        /// <returns></returns>
-        public static string CreateRequest(bool only_availability) 
-        {
-            string keyword = "";
-            if (only_availability)
-                keyword = "ЛЕВОЕ";
-            else
-                keyword = "ПРАВОЕ";
-            string date = "ДАТАВРЕМЯ(" + DateTime.Now.Year + "," + DateTime.Now.Month + "," + DateTime.Now.Day + ")";
-            string request =
-        @"ВЫБРАТЬ
-			ЦеныНоменклатурыСрезПоследних.Номенклатура.Наименование КАК Номенклатура,
-			ЦеныНоменклатурыСрезПоследних.Цена,
-			ЦеныНоменклатурыСрезПоследних.Валюта.Наименование КАК Валюта,
-			ЦеныНоменклатурыСрезПоследних.ЕдиницаИзмерения.Наименование КАК ЕдиницаИзмерения
-		ИЗ
-			РегистрНакопления.ТоварыВРознице.Остатки(" + date + @", Склад.Наименование = &Склад) КАК ТоварыВРозницеОстатки
-				" + keyword + " СОЕДИНЕНИЕ РегистрСведений.ЦеныНоменклатуры.СрезПоследних(" + date + @", ТипЦен.Наименование = &ТипыЦен) КАК ЦеныНоменклатурыСрезПоследних
-				ПО ТоварыВРозницеОстатки.Номенклатура = ЦеныНоменклатурыСрезПоследних.Номенклатура";
-            return request;
-        }
 
-        /// <summary>
-        /// Строка запроса для получения списка складов
-        /// </summary>
-        public static string RequestStorage = @"ВЫБРАТЬ
-	 	                Склады.Наименование
-	                 ИЗ
-	 	                Справочник.Склады КАК Склады";
-        /// <summary>
-        /// Строка запроса для получения типов цен номенклатуры
-        /// </summary>
-        public static string RequestTypePrice = @"ВЫБРАТЬ
-	                	ТипыЦенНоменклатуры.Ссылка,
-	                	ТипыЦенНоменклатуры.Наименование,
-	                	ТипыЦенНоменклатуры.ВалютаЦены.Наименование
-	                 ИЗ
-	                	Справочник.ТипыЦенНоменклатуры КАК ТипыЦенНоменклатуры";
         public static string RequestIdel = @"ВЫБРАТЬ 
                      ТоварыНаСкладах.Номенклатура.Артикул КАК Артикул,
                      ТоварыНаСкладах.Номенклатура.НаименованиеПолное КАК НаименованиеТовара,
@@ -272,16 +328,86 @@ namespace idel_app.DB
 	                 ТоварыНаСкладах.Номенклатура.ОсновнойПоставщик.Наименование КАК ОсновнойПоставщик
 	               ИЗ
 	                 РегистрНакопления.ТоварыНаСкладах КАК ТоварыНаСкладах";
+        public static string RequestTest = @"ВЫБРАТЬ 
+                     ТестРегистр.Измерение1 КАК Артикул,
+                     ТестРегистр.Измерение2 КАК НаименованиеТовара,
+	               	 ТестРегистр.Измерение3 КАК Комментарий,
+	                 ТестРегистр.Измерение4 КАК ОсновнойПоставщик
+	               ИЗ
+	                 РегистрНакопления.ТестРегистр КАК ТестРегистр";
         public static string RequestProvider = @"ВЫБРАТЬ 
                      Контрагенты.НаименованиеПолное КАК Наименование
 	               ИЗ
 	                 Справочник.Контрагенты КАК Поставщики";
-        public static string RequestProduct = @"ВЫБРАТЬ 
-                     ТоварыНаСкладах.Номенклатура.Артикул КАК Артикул,
-                     ТоварыНаСкладах.Номенклатура.НаименованиеПолное КАК НаименованиеТовара,
-	               	 ТоварыНаСкладах.Номенклатура.Комментарий КАК Комментарий,
-	                 ТоварыНаСкладах.Номенклатура.ОсновнойПоставщик.Наименование КАК ОсновнойПоставщик
-	               ИЗ
-	                 РегистрНакопления.ТоварыНаСкладах КАК ТоварыНаСкладах";
+        public static string RequestTestAdd = @"ВЫБРАТЬ
+               	ТестСправочник.Реквизит1,
+               	ТестСправочник.Реквизит2,
+               	ТестСправочник.Реквизит3,
+                ТестСправочник.Код
+               ИЗ
+               	Справочник.ТестСправочник КАК ТестСправочник";
+        public static string RequestGetAllProjects = @"ВЫБРАТЬ
+                                 	Проекты.Код,
+                                 	Проекты.Наименование,
+                                 	Проекты.ДатаНачала,
+                                 	Проекты.ДатаОкончания,
+                                 	Проекты.Ответственный.Наименование КАК Ответственный,
+                                 	Проекты.Описание,
+                                 	Проекты.СтатусСдачи, 
+                                 	Проекты.Клиент
+                                  ИЗ
+                                 	Справочник.Проекты КАК Проекты";
+        public static string RequestGetDescriptionProjectById = @"ВЫБРАТЬ
+                                 	Проекты.Описание
+                                 ИЗ
+                                 	Справочник.Проекты КАК Проекты
+                                 ГДЕ
+                                 	Проекты.Код = &Код";
+        public static string RequestGetAllProvidersNames = @"ВЫБРАТЬ
+                                 	Контрагенты.Наименование КАК Наименование,
+                                    Контрагенты.Код КАК Код
+                                 ИЗ
+                                 	Справочник.Контрагенты КАК Контрагенты
+                                 ГДЕ
+                                 	Контрагенты.Поставщик = Истина";
+        public static string RequestGetAllClientsNames = @"ВЫБРАТЬ
+                                 	Контрагенты.Наименование КАК Наименование,
+                                    Контрагенты.Код КАК Код
+                                 ИЗ
+                                 	Справочник.Контрагенты КАК Контрагенты
+                                 ГДЕ
+                                 	Контрагенты.Покупатель = Истина";
+        public static string RequestGetAllProjectOfClient = @"ВЫБРАТЬ
+	                             	Проекты.Код,
+                                 	Проекты.Наименование,
+                                 	Проекты.ДатаНачала,
+                                 	Проекты.ДатаОкончания,
+                                 	Проекты.Ответственный.Наименование КАК Ответственный,
+                                 	Проекты.Описание,
+                                 	Проекты.СтатусСдачи, 
+                                 	Проекты.Клиент
+                                 ИЗ
+                                 	Справочник.Проекты КАК Проекты
+                                 ГДЕ
+                                 	Проекты.Клиент ПОДОБНО &Клиент";
+        public static string RequestGetProductNameByArticle = @"ВЫБРАТЬ
+			                	Номенклатура.Наименование
+			                  ИЗ
+			                	Справочник.Номенклатура КАК Номенклатура
+			                  ГДЕ
+			                	Номенклатура.Артикул = &Артикул";
+
+        public static string RequestGetAllUsers = @"ВЫБРАТЬ
+				                      	Пользователи.Наименование
+				                      ИЗ
+				                      	Справочник.Пользователи КАК Пользователи";
+        public static string RequestGetProductsFromRegistr(string nameRegistr)
+        {
+            return @"ВЫБРАТЬ
+            " + nameRegistr + @".Номенклатура.Наименование КАК Наименование,
+            " + nameRegistr + @".Номенклатура.Артикул КАК Артикул                    
+            ИЗ
+            РегистрНакопления." + nameRegistr + " КАК " + nameRegistr;
+        }
     }
 }

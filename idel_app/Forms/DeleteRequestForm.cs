@@ -9,23 +9,23 @@ using System.Windows.Forms;
 using UpgradeControls;
 
 namespace idel_app.Forms {
-  public partial class DeleteRequestForm : MiniManagerAppForm {
-    public DeleteRequestForm(List<int> ind) {
-      InitializeComponent();
-      this.Show();
-    }
+    public partial class DeleteRequestForm : MiniManagerAppForm {
+        public DeleteRequestForm(List<int> ind) {
+            InitializeComponent();
+            this.Show();
+        }
 
-    private void button1_Click(object sender, EventArgs e) {
-      if (deleteAllCheckRadioButton.Checked) {
-        
-      }
-      if (deleteAllRadioButton.Checked) {
-        
-      }
-      if (deleteAllPassedRadioButton.Checked) {
-        
-      }
-      this.Close();
+        private void button1_Click(object sender, EventArgs e) {
+            if (deleteAllCheckRadioButton.Checked) {
+                
+            }
+            if (deleteAllRadioButton.Checked) {
+
+            }
+            if (deleteAllPassedRadioButton.Checked) {
+
+            }
+            this.Close();
+        }
     }
-  }
 }
