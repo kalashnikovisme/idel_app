@@ -74,6 +74,19 @@ namespace idel_app.BisnessLogic {
 			}
 		}
 
+        private BusinessProperity title = new BusinessProperity("", "Название");
+        public string Title
+        {
+            get
+            {
+                return title.Properity.ToString();
+            }
+            set
+            {
+                title.Properity = value;
+            }
+        }
+
 		#endregion
 
 		public Request(int _id, string _title, DateTime _createDate, DateTime _passDate, string _employee,
@@ -84,17 +97,20 @@ namespace idel_app.BisnessLogic {
 			Employee = _employee;
 			RequestPassStatus = _requestStatus;
 			Description = new DescriptionRequestTable(DescriptionHeader, BLogicConst.ConvertToListList(_description));
-		}
+            Title = _title;
+        }
 
 		public Request(int _id, string _title, DateTime _createDate, DateTime _passDate, string _employee,
-					   bool _requestStatus, List<List<string>> _description) {
+                       bool _requestStatus, List<List<string>> _description)
+        {
 			Id = _id;
 			CreateDate = _createDate;
 			PassDate = _passDate;
 			Employee = _employee;
 			RequestPassStatus = _requestStatus;
 			Description = new DescriptionRequestTable(DescriptionHeader, _description);
-		}
+            Title = _title;
+        }
 
 		public Request() {
 			Id = 0;
@@ -103,14 +119,21 @@ namespace idel_app.BisnessLogic {
 			Employee = "Sidius";
 			RequestPassStatus = BLogicConst.REQUEST_WAIT;
 			Description = new DescriptionRequestTable(DescriptionHeader);
+            Title = "Build of Death Star";
 		}
 
 		public object[] ProperitesWithOutDescription() {
-			return new object[] { Id, CreateDate, PassDate, Employee, RequestPassStatus };
+			return new object[] { Id, Title, CreateDate, PassDate, Employee, RequestPassStatus };
 		}
 
+        public List<string> ProperitesForAdding()
+        {
+            return new List<string> { title.Name, createDate.Name, passDate.Name };
+        }
+
+
 		public List<string> ProperitesNamesWithOutDescription() {
-			return new List<string>() { id.Name, createDate.Name, passDate.Name, employee.Name };
+			return new List<string>() { id.Name, title.Name, createDate.Name, passDate.Name, employee.Name };
 		}
 	}
 }
