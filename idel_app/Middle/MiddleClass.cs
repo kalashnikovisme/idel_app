@@ -55,9 +55,18 @@ namespace idel_app.Middle {
 			return r.ProperitesNamesWithOutDescription();
 		}
 
+        public List<string> RequestAddingFields()
+        {
+            Request r = new Request();
+            return r.ProperitesForAdding();
+        }
+
 		public void AddNewRequest(List<string> newAdd, string clientName) {
-			List<List<string>> list = AllRequestsOfClient(clientName);
-			list.Add(newAdd);
+            List<string> add = newAdd;
+            add.Add("");
+            add.Add("Ложь");
+            add.Add(clientName);
+            Request_DB.AddNewProject(add);
 		}
 
 		public void DeleteRequestByIndex(int index) {
@@ -73,7 +82,14 @@ namespace idel_app.Middle {
 		}
 
 		public void SaveChanges(List<List<string>> changes) {
-
+            foreach (List<string> l in changes)
+            {
+                int id = Int32.Parse(l[0]);
+                l.RemoveAt(0);
+                l.Add(Request_DB.GetDescriptionProjectById(id));
+                l.Add(CurrentClient.Id.ToString());
+                Request_DB.updateProjectById(l, id);
+            }
 		}
 
 		public void MarkRequestPassed(int index) {
@@ -106,17 +122,27 @@ namespace idel_app.Middle {
 			return list;
 		}
 
+        public void DeleteClientByIndex(int index) {
+            Client_DB.DeleteClientById(index);   
+        }
+
+
 		public List<string> ClientFields() {
 			return TypeFields(typeof(Client));
 		}
 
 		public void AddNewClient(List<string> newAdd) {
-
+            Client_DB.AddNewClient(newAdd[0]);
 		}
 
 		#endregion
 
-		private List<string> TypeFields(Type type) {
+        public List<string> AllUsers()
+        {
+            return Request_DB.GetAllUsers();
+        }
+        
+        private List<string> TypeFields(Type type) {
 			var foo = Activator.CreateInstance(type);
 			List<string> list = new List<string>();
 			foreach (System.Reflection.PropertyInfo p in foo.GetType().GetProperties()) {

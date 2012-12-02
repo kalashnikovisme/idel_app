@@ -7,10 +7,12 @@ using System.Windows.Forms;
 
 namespace idel_app.Forms {
     public class AddDataForm : MiniManagerAppForm {
-        private DisTextBox[] fields;
+        private List<DisTextBox> fields;
         public List<string> Datas;
         private AppButton addButton;
         private FunctionPanel all;
+        private DisComboBox com;
+        private int ControlCount = 0;
 
         private void InitializeComponent() {
             this.addButton = new AppButton();
@@ -38,27 +40,29 @@ namespace idel_app.Forms {
             InitializeComponent();
             addButton.Indent = AppButton.ControlIndent.Middle;
             addButton.Click += new EventHandler(addButton_Click);
-
-            fields = new DisTextBox[fieldsNames.Length];
-            for (int i = 0; i < fields.Length; i++) {
-                fields[i] = new DisTextBox() {
+            fields = new List<DisTextBox>();
+            for (int i = 0; i < fieldsNames.Length; i++) {
+                fields.Add(new DisTextBox()
+                {
                     DisText = fieldsNames[i],
                     Font = new System.Drawing.Font("Times New Roman", 12F),
                     Dock = DockStyle.Fill
-                };
+                });
+
             }
             all = new FunctionPanel() {
                 ColumnCount = 1,
                 Dock = DockStyle.Fill
             };
 
-            for (int i = 0; i < fields.Length; i++) {
+            for (int i = 0; i < fields.Count; i++) {
                 all.Controls.Add(fields[i], 0, i);
             }
 
             this.all.Controls.Add(addButton, 0, all.RowCount - 1);
             this.Controls.Add(all);
             ChangeWindowSizeByTextBox();
+            ControlCount = fields.Count;
             this.Show();
         }
 
@@ -81,22 +85,39 @@ namespace idel_app.Forms {
             foreach (DisTextBox t in fields) {
                 Datas.Add(t.Text);
             }
+            if (com.SelectedIndex == -1)
+            {
+                MessageBox.Show("Выберите ответственного!");
+                return;
+            }
+            if (com != null) 
+            {
+                Datas.Add(com.Items[com.SelectedIndex].ToString());
+            }
             this.Close();
         }
 
         private void ChangeWindowSizeByTextBox() {
             int width = this.Width;
-            int height = addButton.Height + (fields.Length * 50); // badcode
+            int height = addButton.Height + ((fields.Count + 1) * 50); // badcode
             this.Size = new System.Drawing.Size(width, height);
         }
 
         public void SetIntTypeField(string fieldName) {
-            for (int i = 0; i < fields.Length; i++) {
+            for (int i = 0; i < ControlCount; i++) {
                 if (fields[i].DisText == fieldName) {
                     fields[i].IntType = true;
                     return;
                 }
             }
+        }
+
+        public void SetComboBoxToLastField(List<string> items)
+        {
+            com = new DisComboBox();
+            com.Items.AddRange(items.ToArray<string>());
+            com.Dock = DockStyle.Fill;
+            all.Controls.Add(com, 0, fields.Count); 
         }
 
         public void SetIntTypeField(int fieldIndex) {

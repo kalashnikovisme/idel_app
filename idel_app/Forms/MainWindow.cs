@@ -29,6 +29,8 @@ namespace idel_app {
 		public event EventHandler DeleteAllRequest;
 		public event EventHandler DeleteCheckedRequest;
 		public event EventHandler DeletePassedRequest;
+        public event EventHandler DeleteAllClients;
+        public event EventHandler DeleteCheckClients;
 
 		private bool RequestValueChanged = false;
 
@@ -44,10 +46,49 @@ namespace idel_app {
 			InitializeFunctionPanelsForFunctions();
 			RequestFunctionGroupInitialize();
 			this.DeleteAllRequest += new EventHandler(MainWindow_DeleteAllRequest);
-			this.DeleteCheckedRequest += new EventHandler(MainWindow_DeleteCheckedRequest);
 			this.DeletePassedRequest += new EventHandler(MainWindow_DeletePassedRequest);
 			this.FormClosing += new FormClosingEventHandler(MainWindow_FormClosing);
 		}
+
+        public void DeleteCheckClientsInvoke()
+        {
+            foreach (DataGridViewRow row in workDataGridView.SelectedRows)
+            {
+                Program.mainMiddleClass.DeleteClientByIndex(Int32.Parse(row.Cells[1].Value.ToString()));
+            }
+        }
+
+        public void DeleteAllClientsInvoke()
+        {
+            foreach (DataGridViewRow row in workDataGridView.Rows)
+            {
+                if (row.Cells[0].Value == null)
+                {
+                    break;
+                }
+                Program.mainMiddleClass.DeleteClientByIndex(Int32.Parse(row.Cells[1].Value.ToString()));
+            }
+        }
+
+        private void MainWindow_DeleteAllRequest(object sender, EventArgs e)
+        {
+            Program.mainMiddleClass.DeleteAll();
+            viewRequests(Program.mainMiddleClass.CurrentClient.Name);
+        }
+
+        private void MainWindow_DeletePassedRequest(object sender, EventArgs e)
+        {
+            Program.mainMiddleClass.DeletePassedRequests();
+        }
+
+        private void MainWindow_DeleteCheckedRequest(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow d in workDataGridView.SelectedRows)
+            {
+                Program.mainMiddleClass.DeleteRequestByIndex(d.Index);
+            }
+            viewRequests(Program.mainMiddleClass.CurrentClient.Name);
+        }
 
 		/// <summary>
 		/// Инициализирует два основных поля интерфейса
@@ -220,15 +261,16 @@ namespace idel_app {
 		/// Открывает окно добавления новых заявок
 		/// </summary>
 		private void AddNewRequest() {
-			addDataForm = new AddDataForm(Program.mainMiddleClass.RequestFields().ToArray<string>());
-			addDataForm.SetIntTypeField("id");
+			addDataForm = new AddDataForm(Program.mainMiddleClass.RequestAddingFields().ToArray<string>());
+            addDataForm.SetComboBoxToLastField(Program.mainMiddleClass.AllUsers());
+
 			addDataForm.FormClosing += new FormClosingEventHandler(add_FormClosing);
 			this.Enabled = false;
 		}
 
 		private void add_FormClosing(object sender, FormClosingEventArgs e) {
-			Program.mainMiddleClass.AddNewRequest(addDataForm.Datas, Program.mainMiddleClass.CurrentClient.Name);
-			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
+			Program.mainMiddleClass.AddNewRequest(addDataForm.Datas, Program.mainMiddleClass.CurrentClient.Id.ToString());
+			viewRequests(Program.mainMiddleClass.CurrentClient.Id.ToString());
 			this.Enabled = true;
 		}
 
@@ -281,22 +323,6 @@ namespace idel_app {
 		private void requestDataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
 			RequestValueChanged = true;
 			workDataGridView.CellValueChanged -= new DataGridViewCellEventHandler(requestDataGridView_CellValueChanged);
-		}
-
-		private void MainWindow_DeleteAllRequest(object sender, EventArgs e) {
-			Program.mainMiddleClass.DeleteAll();
-			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
-		}
-
-		private void MainWindow_DeletePassedRequest(object sender, EventArgs e) {
-			Program.mainMiddleClass.DeletePassedRequests();
-		}
-
-		private void MainWindow_DeleteCheckedRequest(object sender, EventArgs e) {
-			foreach (DataGridViewRow d in workDataGridView.SelectedRows) {
-				Program.mainMiddleClass.DeleteRequestByIndex(d.Index);
-			}
-			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
 		}
 
 		private void createRequestButton_Click(object sender, EventArgs e) {
@@ -390,13 +416,15 @@ namespace idel_app {
 		}
 
 		private void AddNewClient() {
-			addDataForm = new AddDataForm(Program.mainMiddleClass.ClientFields().ToArray<string>());
+            List<string> l = Program.mainMiddleClass.ClientFields();
+            l.RemoveAt(1);
+			addDataForm = new AddDataForm(l.ToArray<string>());
 			addDataForm.FormClosing += new FormClosingEventHandler(addClientForm_FormClosing);
 			this.Enabled = false;
 		}
 
 		private void addClientForm_FormClosing(object sender, FormClosingEventArgs e) {
-			Program.mainMiddleClass.AddNewRequest(addDataForm.Datas, Program.mainMiddleClass.CurrentClient.Name);
+			Program.mainMiddleClass.AddNewClient(addDataForm.Datas);
 			viewClients();
 			this.Enabled = true;
 		}
@@ -417,7 +445,7 @@ namespace idel_app {
 			clientDataGridView.Columns.AddRange(columns.ToArray<DataGridViewColumn>());
 			clientDataGridView.MinimumSize = new System.Drawing.Size(400, 400);
 			clientDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			clientDataGridView.Columns[0].Width = 40;
+			clientDataGridView.Columns[1].Width = 50;
 			clientDataGridView.CellValueChanged += new DataGridViewCellEventHandler(requestDataGridView_CellValueChanged);
 			for (int i = 0; i < clientDataGridView.Rows.Count; i++) {
 				clientDataGridView.DoubleClick += new EventHandler(clientDataGridView_DoubleClick);
@@ -428,11 +456,15 @@ namespace idel_app {
 
 		private void clientDataGridView_SelectionChanged(object sender, EventArgs e) {
 			selectedRows = workDataGridView.SelectedRows;
-		}
+            if (selectedRows.Count > 0)
+            {
+                Program.mainMiddleClass.CurrentClient = new BisnessLogic.Client(selectedRows[0].Cells[0].Value.ToString(), Int32.Parse(selectedRows[0].Cells[1].Value.ToString()));
+            }
+        }
 
 		private void clientDataGridView_DoubleClick(object sender, EventArgs e) {
-			viewRequests(Program.mainMiddleClass.CurrentClient.Name);
-			Program.mainMiddleClass.CurrentClient = new BisnessLogic.Client(selectedRows[0].Cells[0].Value.ToString());
+			viewRequests(Program.mainMiddleClass.CurrentClient.Id.ToString());
+			Program.mainMiddleClass.CurrentClient = new BisnessLogic.Client(selectedRows[0].Cells[0].Value.ToString(), Int32.Parse(selectedRows[0].Cells[1].Value.ToString()));
 		}
 
 		#endregion

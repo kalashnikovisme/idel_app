@@ -17,7 +17,7 @@ namespace idel_app.Forms {
 
         private void button1_Click(object sender, EventArgs e) {
             if (deleteAllCheckRadioButton.Checked) {
-
+                
             }
             if (deleteAllRadioButton.Checked) {
 

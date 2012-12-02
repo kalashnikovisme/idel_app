@@ -73,11 +73,12 @@ namespace idel_app.Forms {
 
         private void button1_Click(object sender, EventArgs e) {
             if (deleteAllCheckRadioButton.Checked) {
-
+                Program.mainWindow.DeleteCheckClientsInvoke();
             }
             if (deleteAllRadioButton.Checked) {
-
+                Program.mainWindow.DeleteAllClientsInvoke();
             }
+            this.Close();
         }
     }
 }

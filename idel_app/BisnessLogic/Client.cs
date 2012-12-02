@@ -15,20 +15,34 @@ namespace idel_app.BisnessLogic {
 			}
 		}
 
+        private BusinessProperity id = new BusinessProperity(-1, "Код");
+        public int Id
+        {
+            get
+            {
+                return Int32.Parse(id.Properity.ToString());
+            }
+            set
+            {
+                id.Properity = value;
+            }
+        }
+
 		public object[] ProperitesWithoutDescription() {
-			return new object[] { Name };
+			return new object[] { Name, Id };
 		}
 
-		private void construct(string _name) {
+		private void construct(string _name, int _id) {
 			Name = _name;
+            Id = _id;
 		}
 
-		public Client(string _name) {
-			construct(_name);
+		public Client(string _name, int _id) {
+			construct(_name, _id);
 		}
 		
 		public Client() {
-			construct("Microsoft");
+			construct("Microsoft", 0);
 		}
 	}
 }
