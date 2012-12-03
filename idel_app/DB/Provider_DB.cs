@@ -20,5 +20,12 @@ namespace idel_app.DB {
             }
             return "NoBody";
         }
+
+        static public List<List<string>> GetAllProvidersNames()
+        {
+            List<string> fields = new List<string>() { "Наименование", "Код" };
+            List<List<string>> requests = CommandTo1C.requestToListLists(Program.v82Base, Program.connector, RequestTo1C.RequestGetAllProvidersNames, fields);
+            return requests;
+        }
     }
 }

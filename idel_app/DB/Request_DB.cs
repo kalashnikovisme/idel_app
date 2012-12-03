@@ -7,15 +7,6 @@ using idel_app.BisnessLogic;
 
 namespace idel_app.DB {
     static public class Request_DB {
-        /// <summary>
-        /// Если в БД будет сущность Request, у которой будут все те же поля, что у меня в классе и они будут расположены в том же порядке, что у 
-        /// у меня в классе, тогда твоя задача просто сделать функцию (она ниже), которая будет переделывать из БД в список списков стрингов, дальше всё должно само по себе произойти.
-        /// Если нет, буди звонком.
-        /// </summary>ок
-        /// <returns></returns>
-        static private List<List<string>> GetAllRequestToListList(string clientName) {
-            return Client_DB.GetAllProjectByClient(clientName);
-        }
 
         static private int PInt(string s) {
             return Int32.Parse(s);
@@ -62,10 +53,12 @@ namespace idel_app.DB {
             return "Ложь";
         }
 
-        static public List<Request> GetAllRequestFromDBByClient(string clientName) {
-            List<List<string>> workList = GetAllRequestToListList(clientName);
+        static public List<Request> GetAllRequestFromDBByClient(string clientName)
+        {
+            List<List<string>> workList = Client_DB.GetAllProjectByClient(clientName);
             List<Request> list = new List<Request>();
-            foreach (List<string> l in workList) {
+            foreach (List<string> l in workList)
+            {
                 list.Add(new Request(PInt(l[0]), l[1], PDT(l[2]), PDT(l[3]), l[4], Parse1CStringToBoolean(l[5]), l[6]));
             }
             return list;
@@ -87,7 +80,7 @@ namespace idel_app.DB {
             string index = CommandTo1C.addToThesaurus(Program.v82Base, Program.connector, "Проекты", requisites);
         }
 
-        static public void updateProjectById(List<string> up, int index)
+        static public void UpdateProjectById(List<string> up, int index)
         {
             //пример списка:
             //List<string>{"Проект1", DateTime.Today.ToString(), DateTime.Today.ToString(), "пользователь1", "это некий проект 1", "Ложь", "Клиент1"}
@@ -102,6 +95,17 @@ namespace idel_app.DB {
             };
             string indexStr = intToFormatString(index);
             bool good = CommandTo1C.updatingRecordFromThesaurus(Program.v82Base, Program.connector, "Проекты", indexStr, updateValues);
+        }
+
+        static public void DeleteProjectById(int index)
+        {
+            string indexStr = intToFormatString(index);
+            bool good = CommandTo1C.deleteFromThesaurus(Program.v82Base, Program.connector, "Проекты", indexStr);
+        }
+        
+        static public void DeleteAllProjects()
+        {
+            CommandTo1C.deleteAllFromThesaurus(Program.v82Base, Program.connector, "Проекты");
         }
 
         static public string GetDescriptionProjectById(int index)
