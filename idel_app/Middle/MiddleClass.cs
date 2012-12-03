@@ -88,7 +88,7 @@ namespace idel_app.Middle {
                 l.RemoveAt(0);
                 l.Add(Request_DB.GetDescriptionProjectById(id));
                 l.Add(CurrentClient.Id.ToString());
-                Request_DB.updateProjectById(l, id);
+                Request_DB.UpdateProjectById(l, id);
             }
 		}
 
