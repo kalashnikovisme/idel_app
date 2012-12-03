@@ -13,7 +13,7 @@ namespace idel_app {
     static void Main() {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
-      idel_app.DB.CommandTo1C.Connect1C(@"d:\programming\1c\идель\", "", "", ref v82Base, ref connector);
+      idel_app.DB.CommandTo1C.Connect1C(@"C:\Documents and Settings\Филиппов Александр\Рабочий стол\Trade 82", "Александр", "301767", ref v82Base, ref connector);
       Application.Run(mainWindow = new MainWindow());
     }
 
